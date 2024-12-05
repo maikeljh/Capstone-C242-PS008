@@ -95,8 +95,8 @@ android:layout_height="match_parent">
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
                     android:background="@color/placeholder_box"
-                    android:fontFamily="@font/inter_medium"
-                    android:hint="@string/input_placeholder_title"
+                    android:fontFamily="@font/poppins"
+                    android:hint="@string/input_placeholder_nama"
                     android:inputType="text"
                     android:paddingVertical="15dp"
                     android:paddingStart="12dp"
@@ -144,6 +144,7 @@ android:layout_height="match_parent">
                 android:layout_height="wrap_content"
                 app:hintEnabled="false">
                 <!--  Nominal Text Input-->
+<!--                Placeholder yang ini harus jadi dropdown nanti -->
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nominalEt"
                     android:layout_width="match_parent"
@@ -151,12 +152,12 @@ android:layout_height="match_parent">
                     android:paddingVertical="15dp"
                     android:background="@color/placeholder_box"
                     android:textColorHint="@color/placeholder_text"
-                    android:hint="@string/input_placeholder_nominal"
+                    android:hint="@string/input_placeholder_satuan"
                     android:inputType="text"
                     android:paddingStart="12dp"
                     android:paddingEnd="0dp"
                     android:textSize="16sp"
-                    android:fontFamily="@font/inter_medium" />
+                    android:fontFamily="@font/poppins" />
 
             </com.google.android.material.textfield.TextInputLayout>
             <!--   EndOf Nominal Text Field     -->
@@ -207,12 +208,12 @@ android:layout_height="match_parent">
                     android:paddingVertical="15dp"
                     android:background="@color/placeholder_box"
                     android:textColorHint="@color/placeholder_text"
-                    android:hint="@string/input_placeholder_category"
+                    android:hint="@string/input_placeholder_jumlah"
                     android:inputType="text"
                     android:paddingStart="12dp"
                     android:paddingEnd="0dp"
                     android:textSize="16sp"
-                    android:fontFamily="@font/inter_medium" />
+                    android:fontFamily="@font/poppins" />
 
             </com.google.android.material.textfield.TextInputLayout>
             <!--   EndOf Kategori Text Field     -->
@@ -227,9 +228,9 @@ android:layout_height="match_parent">
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="30dp"
-            android:fontFamily="@font/inter_semi_bold"
-            android:text="@string/lokasi"
-            android:textColor="@color/text"
+            android:fontFamily="@font/poppins"
+            android:text="@string/harga_satuan"
+            android:textColor="@color/gray6"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cardView3"
@@ -268,11 +269,11 @@ android:layout_height="match_parent">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:fontFamily="@font/inter_semi_bold"
-            android:text="@string/lokasiError"
-            android:textColor="@color/red"
+            android:fontFamily="@font/poppins"
+            android:text="@string/input_placeholder_harga"
+            android:textColor="@color/placeholder_text"
+            android:background="@color/placeholder_box"
             android:textSize="18sp"
-            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cardView4"
             app:layout_constraintHorizontal_bias="0.5"
