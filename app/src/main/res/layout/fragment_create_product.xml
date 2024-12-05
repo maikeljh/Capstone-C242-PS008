@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/mainLayout"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+
+<!-- Loading Screen -->
+
+<!--<FrameLayout-->
+<!--    android:id="@+id/loadingLayout"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:background="@color/white"-->
+<!--    android:visibility="gone"-->
+<!--    android:gravity="center">-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/loadingLabel"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/loading"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginTop="40dp"/>-->
+
+<!--    <ProgressBar-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:indeterminate="true"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:progressTint="@color/black"/>-->
+
+<!--</FrameLayout>-->
+
+
+<ScrollView
+    android:id="@+id/fragment_create_product"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/inputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible">
+
+        <!--  Judul label  -->
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/poppins"
+            android:text="@string/nama"
+            android:textColor="@color/gray6"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <!--  Judul layout  -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintTop_toBottomOf="@id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:strokeColor="@color/border"
+            app:strokeWidth="1dp">
+
+
+            <!--   Judul Text Field     -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintEnabled="false">
+                <!--  Judul Text Input-->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/titleEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:background="@color/placeholder_box"
+                    android:fontFamily="@font/inter_medium"
+                    android:hint="@string/input_placeholder_title"
+                    android:inputType="text"
+                    android:paddingVertical="15dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="0dp"
+                    android:textColorHint="@color/placeholder_text"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!--  EndOf Judul Text Field   -->
+        </com.google.android.material.card.MaterialCardView>
+        <!--  EndOf Judul layout  -->
+
+        <!--  Nominal Label  -->
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/poppins"
+            android:text="@string/satuan"
+            android:textColor="@color/gray6"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardView1"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+        <!-- Nominal Layout   -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            app:cardCornerRadius="8dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView2">
+
+            <!--   Nominal Text Field     -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintEnabled="false">
+                <!--  Nominal Text Input-->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nominalEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="15dp"
+                    android:background="@color/placeholder_box"
+                    android:textColorHint="@color/placeholder_text"
+                    android:hint="@string/input_placeholder_nominal"
+                    android:inputType="text"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="0dp"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/inter_medium" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <!--   EndOf Nominal Text Field     -->
+
+        </com.google.android.material.card.MaterialCardView>
+        <!-- EndOf Nominal Layout   -->
+
+        <!--  Kategori Label  -->
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/poppins"
+            android:text="@string/jumlah"
+            android:textColor="@color/gray6"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardView2"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+        <!-- Kategori Layout   -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            app:cardCornerRadius="8dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView3">
+
+            <!--   Kategori Text Field     -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintEnabled="false">
+                <!--  Kategori Text Input-->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/kategoriEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="15dp"
+                    android:background="@color/placeholder_box"
+                    android:textColorHint="@color/placeholder_text"
+                    android:hint="@string/input_placeholder_category"
+                    android:inputType="text"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="0dp"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/inter_medium" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <!--   EndOf Kategori Text Field     -->
+
+        </com.google.android.material.card.MaterialCardView>
+        <!-- EndOf Kategori Layout   -->
+
+        <!--  Lokasi Label  -->
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/inter_semi_bold"
+            android:text="@string/lokasi"
+            android:textColor="@color/text"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardView3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+        <!-- Lokasi Layout   -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            app:cardCornerRadius="8dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView4">
+
+            <!--   Fragment for Lokasi-->
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/autocomplete_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment" />
+            <!--  EndOf Fragment  -->
+
+
+
+        </com.google.android.material.card.MaterialCardView>
+        <!-- EndOf Lokasi Layout   -->
+        <!-- Error Location Layout -->
+        <TextView
+            android:id="@+id/emptyLocationError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:fontFamily="@font/inter_semi_bold"
+            android:text="@string/lokasiError"
+            android:textColor="@color/red"
+            android:textSize="18sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardView4"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+        <!--    EndOf Error Location Layout -->
+        <!--    Submit Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/submitButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:paddingVertical="15dp"
+            android:text="@string/simpan"
+            app:cornerRadius="100dp"
+            app:layout_constraintTop_toBottomOf="@id/emptyLocationError"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="40dp"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</ScrollView>
+</FrameLayout>

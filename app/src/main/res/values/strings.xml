@@ -3,4 +3,10 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_capture_receipt">Capture Receipt</string>
+
+    <!--    Buat Tambah Produk-->
+    <string name="nama">Nama</string>
+    <string name="simpan">Simpan</string>
+    <string name="satuan">Satuan (Lt,Pcs,Pack,gr)</string>
+    <string name="jumlah">Jumlah</string>
 </resources>
