@@ -15,4 +15,7 @@
     <string name="input_placeholder_jumlah">Masukkan jumlah barang</string>
     <string name="input_placeholder_satuan">Pilih satuan</string>
     <string name="input_placeholder_harga">Masukkan harga satuan</string>
+    <string name="title_product">Product</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_scan">Scan</string>
 </resources>
