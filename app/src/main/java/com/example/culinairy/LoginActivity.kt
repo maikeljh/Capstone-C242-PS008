@@ -1,25 +1,54 @@
 package com.example.culinairy
-
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import android.widget.ScrollView
+import android.widget.Toast
+import com.example.culinairy.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
+
+    private var _binding: ActivityLoginBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() // Enables edge-to-edge layout for system bars
+        supportActionBar?.hide()
+        _binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        setContentView(R.layout.activity_login)
+        binding.loginButton.setOnClickListener {
+            val email = binding.emailEt.text.toString().trim()
+            val password = binding.passEt.text.toString().trim()
 
-        // Ensure the ScrollView (or a root layout in your case) gets proper system bar padding
-        val rootLayout = findViewById<ScrollView>(R.id.rootLayout) // Ensure the root layout has an ID set in XML
-        ViewCompat.setOnApplyWindowInsetsListener(rootLayout) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                login(email, password)
+            } else {
+                Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show()
+            }
         }
+
+        binding.registerButton.setOnClickListener {
+            navigateToRegister()
+        }
+
+        binding.googleButton.setOnClickListener {
+            navigateToMain()
+        }
+    }
+
+    private fun login(email: String, password: String) {
+        navigateToMain()
+    }
+
+    private fun navigateToMain() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun navigateToRegister() {
+        val intent = Intent(this, RegisterActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

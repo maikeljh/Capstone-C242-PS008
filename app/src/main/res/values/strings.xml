@@ -37,4 +37,7 @@
     <string name="password_placeholder_2">massukan password</string>
 
 
+    <string name="title_product">Product</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_scan">Scan</string>
 </resources>

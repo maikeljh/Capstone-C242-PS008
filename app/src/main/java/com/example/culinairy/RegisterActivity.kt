@@ -1,26 +1,33 @@
 package com.example.culinairy
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.ScrollView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.example.culinairy.databinding.ActivityRegisterBinding
 
 class RegisterActivity : AppCompatActivity() {
+
+    private var _binding: ActivityRegisterBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() // Enable edge-to-edge support
-        setContentView(R.layout.activity_register) // Ensure the correct layout is used
 
-        // Find the root layout in the activity to apply window insets
-        val rootLayout = findViewById<ScrollView>(R.id.rootLayout2)
+        _binding = ActivityRegisterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // Apply window insets to handle system bars (status bar, navigation bar)
-        ViewCompat.setOnApplyWindowInsetsListener(rootLayout) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        binding.registerButton.setOnClickListener {
+            navigateToLogin()
         }
+    }
+
+    private fun register(email: String, password: String) {
+        navigateToLogin()
+    }
+
+    private fun navigateToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
