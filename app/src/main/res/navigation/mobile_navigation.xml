@@ -22,4 +22,16 @@
         android:name="com.example.culinairy.ui.capture_ocr.CaptureReceiptFragment"
         android:label="@string/title_capture_receipt"
         tools:layout="@layout/fragment_capture_receipt" />
+
+    <fragment
+        android:id="@+id/navigation_product"
+        android:name="com.example.culinairy.ui.capture_ocr.ProductFragment"
+        android:label="@string/title_product"
+        tools:layout="@layout/fragment_create_product" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.culinairy.ui.capture_ocr.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>
