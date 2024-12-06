@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_capture_receipt"
-        android:name="com.example.culinairy.ui.notifications.NotificationsFragment"
+        android:name="com.example.culinairy.ui.capture_ocr.CaptureReceiptFragment"
         android:label="@string/title_capture_receipt"
         tools:layout="@layout/fragment_capture_receipt" />
 </navigation>

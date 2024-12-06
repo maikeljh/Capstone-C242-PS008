@@ -1,4 +1,4 @@
-package com.example.culinairy.ui.notifications
+package com.example.culinairy.ui.capture_ocr
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.culinairy.databinding.FragmentCaptureReceiptBinding
 
-class NotificationsFragment : Fragment() {
+class CaptureReceiptFragment : Fragment() {
 
     private var _binding: FragmentCaptureReceiptBinding? = null
 
@@ -23,7 +23,7 @@ class NotificationsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val notificationsViewModel =
-            ViewModelProvider(this).get(NotificationsViewModel::class.java)
+            ViewModelProvider(this).get(CaptureReceiptViewModel::class.java)
 
         _binding = FragmentCaptureReceiptBinding.inflate(inflater, container, false)
         val root: View = binding.root
