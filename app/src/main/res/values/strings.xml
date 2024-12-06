@@ -15,4 +15,26 @@
     <string name="input_placeholder_jumlah">Masukkan jumlah barang</string>
     <string name="input_placeholder_satuan">Pilih satuan</string>
     <string name="input_placeholder_harga">Masukkan harga satuan</string>
+
+    <!--   Login Page   -->
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="email_placeholder">your email</string>
+    <string name="password_placeholder">your password</string>
+    <string name="keep_me_logged_in">Keep me logged in</string>
+    <string name="lupa_password">lupa password?</string>
+    <string name="masuk">Masuk</string>
+    <string name="registrasi">Registrasi</string>
+    <string name="or_login_with">or login with</string>
+    <string name="logo">logo</string>
+
+    <!--   Register Page   -->
+    <string name="posisi">Posisi</string>
+    <string name="nama_placeholder">masukkan nama</string>
+    <string name="posisi_placeholder">masukkan posisi</string>
+    <string name="tandc">I agree with terms and condition</string>
+    <string name="email_placeholder_2">masukkan email</string>
+    <string name="password_placeholder_2">massukan password</string>
+
+
 </resources>
