@@ -12,9 +12,8 @@
 
     <item
         android:id="@+id/navigation_capture_receipt"
-        android:icon="@drawable/qr_code"
-        android:title="@string/title_scan"
-        android:enabled="true" />
+        android:title=""
+        android:enabled="false"/>
 
     <item
         android:id="@+id/navigation_product"
