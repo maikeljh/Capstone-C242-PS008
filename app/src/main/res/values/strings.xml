@@ -3,4 +3,16 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_capture_receipt">Capture Receipt</string>
+
+    <!--    Buat Tambah Produk-->
+    <string name="nama">Nama</string>
+    <string name="simpan">Simpan</string>
+    <string name="satuan">Satuan (Lt,Pcs,Pack,gr)</string>
+    <string name="jumlah">Jumlah</string>
+    <string name="harga_satuan">Harga Satuan (Rp)</string>
+
+    <string name="input_placeholder_nama">Masukkan nama barang</string>
+    <string name="input_placeholder_jumlah">Masukkan jumlah barang</string>
+    <string name="input_placeholder_satuan">Pilih satuan</string>
+    <string name="input_placeholder_harga">Masukkan harga satuan</string>
 </resources>
