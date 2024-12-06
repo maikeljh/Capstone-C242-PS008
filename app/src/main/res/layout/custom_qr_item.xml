@@ -1,0 +1,19 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+    <ImageView
+        android:id="@+id/background_circle"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:src="@drawable/circle_background"
+        android:layout_gravity="center" />
+
+    <ImageView
+        android:id="@+id/qr_code_icon"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/qr_code"
+        android:layout_gravity="center" />
+</FrameLayout>
