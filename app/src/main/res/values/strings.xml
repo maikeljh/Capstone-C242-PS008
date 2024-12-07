@@ -36,8 +36,25 @@
     <string name="email_placeholder_2">masukkan email</string>
     <string name="password_placeholder_2">massukan password</string>
 
-
     <string name="title_product">Product</string>
     <string name="title_profile">Profile</string>
     <string name="title_scan">Scan</string>
+
+    <!--   Capture Receipt   -->
+    <string name="overlay">Overlay</string>
+    <string name="gallery_button">Gallery Button</string>
+    <string name="camera_button">Camera Button</string>
+    <string name="retake">Retake</string>
+    <string name="next">Continue</string>
+
+    <!--   Capture Receipt Result   -->
+    <string name="edit_struk">Edit Struk</string>
+    <string name="konfirmasi">Konfirmasi</string>
+    <string name="struk">Struk</string>
+    <string name="total_harga">Total Harga</string>
+    <string name="rp0">Rp0</string>
+    <string name="item_0kg">Item 0kg</string>
+    <string name="_0x">0x</string>
+
+    <!--   Item Product   -->
 </resources>

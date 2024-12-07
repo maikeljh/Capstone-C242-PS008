@@ -21,7 +21,17 @@
         android:id="@+id/navigation_capture_receipt"
         android:name="com.example.culinairy.ui.capture_ocr.CaptureReceiptFragment"
         android:label="@string/title_capture_receipt"
-        tools:layout="@layout/fragment_capture_receipt" />
+        tools:layout="@layout/fragment_capture_receipt" >
+        <action
+            android:id="@+id/action_captureReceiptFragment_to_resultFragment"
+            app:destination="@id/navigation_capture_receipt_result" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_capture_receipt_result"
+        android:name="com.example.culinairy.ui.capture_ocr_result.CaptureReceiptResultFragment"
+        android:label="Hasil Scan"
+        tools:layout="@layout/fragment_capture_receipt_result" />
 
     <fragment
         android:id="@+id/navigation_product"

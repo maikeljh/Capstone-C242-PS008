@@ -4,19 +4,128 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".ui.capture_ocr.CaptureReceiptFragment">
 
-    <TextView
-        android:id="@+id/text_capture_receipt"
+    <androidx.camera.view.PreviewView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
+        android:layout_height="0dp"
+        android:id="@+id/previewView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonsLayout" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/overlay"
+        android:contentDescription="@string/overlay"
+        android:src="@drawable/transparent_overlay"
+        android:scaleType="fitXY"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonsLayout" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttonsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/previewView">
+
+        <ImageButton
+            android:id="@+id/galleryButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_gallery"
+            android:contentDescription="@string/gallery_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/cameraButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/cameraButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/camera_button"
+            android:contentDescription="@string/camera_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/retakeButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/confirmButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.40"
+            android:visibility="invisible" >
+
+            <ImageView
+                android:id="@+id/retakeButtonBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/rounded_retake_button"
+                android:contentDescription="@string/retake"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/retakeButtonText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/retake"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/poppins"
+                android:gravity="center"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/confirmButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/retakeButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.40"
+            android:visibility="invisible" >
+
+            <ImageView
+                android:id="@+id/confirmButtonBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/rounded_continue_button"
+                android:contentDescription="@string/next"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/confirmButtonText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/next"
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/poppins"
+                android:gravity="center"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
