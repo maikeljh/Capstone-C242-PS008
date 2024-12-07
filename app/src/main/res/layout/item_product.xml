@@ -8,7 +8,7 @@
         android:id="@+id/itemText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Item 0kg"
+        android:text="@string/item_0kg"
         android:textSize="14sp"
         android:fontFamily="@font/poppins"
         android:textStyle="bold"
@@ -22,7 +22,7 @@
         android:id="@+id/priceText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rp0"
+        android:text="@string/rp0"
         android:textSize="14sp"
         android:fontFamily="@font/poppins"
         android:textStyle="bold"
@@ -38,7 +38,7 @@
         android:id="@+id/quantityText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0x"
+        android:text="@string/_0x"
         android:textSize="14sp"
         android:fontFamily="@font/poppins"
         android:textStyle="bold"
@@ -53,7 +53,7 @@
         android:id="@+id/totalPriceText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rp0"
+        android:text="@string/rp0"
         android:textSize="14sp"
         android:fontFamily="@font/poppins"
         android:textStyle="bold"
@@ -69,6 +69,7 @@
         android:layout_height="1dp"
         android:layout_marginHorizontal="20dp"
         android:background="@drawable/dotted_line"
+        app:tint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

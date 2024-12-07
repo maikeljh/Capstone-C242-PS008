@@ -25,6 +25,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.culinairy.R
 import com.example.culinairy.databinding.FragmentCaptureReceiptBinding
 import com.example.culinairy.ui.capture_ocr.CameraManager.Companion.allPermissionGranted
@@ -123,6 +124,8 @@ class CaptureReceiptFragment : Fragment(), ImageCaptureCallback {
         }
         binding.confirmButton.setOnClickListener {
             val bitmap = (binding.overlay.drawable as? BitmapDrawable)?.bitmap
+
+            findNavController().navigate(R.id.action_captureReceiptFragment_to_resultFragment)
         }
     }
 
