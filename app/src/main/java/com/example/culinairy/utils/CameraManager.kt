@@ -1,4 +1,4 @@
-package com.example.culinairy.ui.capture_ocr
+package com.example.culinairy.utils
 
 import android.Manifest
 import android.app.Activity

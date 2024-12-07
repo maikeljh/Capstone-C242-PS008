@@ -1,5 +1,6 @@
 package com.example.culinairy.Adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,7 @@ class ProductReceiptAdapter(
         private val quantityText: TextView = itemView.findViewById(R.id.quantityText)
         private val totalPriceText: TextView = itemView.findViewById(R.id.totalPriceText)
 
+        @SuppressLint("SetTextI18n")
         fun bind(product: Product) {
             itemText.text = product.name
             priceText.text = "Rp${product.price}"

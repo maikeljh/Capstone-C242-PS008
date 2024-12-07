@@ -1,9 +1,7 @@
 package com.example.culinairy.ui.capture_ocr
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
@@ -17,18 +15,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.culinairy.R
 import com.example.culinairy.databinding.FragmentCaptureReceiptBinding
-import com.example.culinairy.ui.capture_ocr.CameraManager.Companion.allPermissionGranted
+import com.example.culinairy.utils.CameraManager
+import com.example.culinairy.utils.CameraManager.Companion.allPermissionGranted
+import com.example.culinairy.utils.ImageCaptureCallback
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.File
