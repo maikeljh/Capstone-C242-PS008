@@ -86,6 +86,7 @@
                 android:text="@string/retake"
                 android:textColor="@color/white"
                 android:textSize="17sp"
+                android:textStyle="bold"
                 android:fontFamily="@font/poppins"
                 android:gravity="center"
                 android:layout_gravity="center" />
@@ -118,6 +119,7 @@
                 android:text="@string/next"
                 android:textColor="@color/black"
                 android:textSize="17sp"
+                android:textStyle="bold"
                 android:fontFamily="@font/poppins"
                 android:gravity="center"
                 android:layout_gravity="center" />
