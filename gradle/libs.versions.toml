@@ -33,6 +33,7 @@ androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navi
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 car-ui-lib = { group = "com.android.car.ui", name = "car-ui-lib", version.ref = "carUiLib" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+mpandroidchart = "com.github.PhilJay:MPAndroidChart:3.1.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
