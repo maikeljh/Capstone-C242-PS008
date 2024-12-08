@@ -123,7 +123,7 @@ class CaptureReceiptFragment : Fragment(), ImageCaptureCallback {
             val bitmap = (binding.overlay.drawable as? BitmapDrawable)?.bitmap
 
             // Navigate to result fragment
-            findNavController().navigate(R.id.action_captureReceiptFragment_to_resultFragment)
+            findNavController().navigate(R.id.action_captureReceiptFragment_to_captureReceiptResultFragment)
         }
     }
 

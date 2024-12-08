@@ -176,14 +176,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/rounded_button"
-            android:contentDescription="@string/konfirmasi"
+            android:contentDescription="@string/simpan"
             android:scaleType="fitXY" />
 
         <TextView
             android:id="@+id/saveButtonText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/konfirmasi"
+            android:text="@string/simpan"
             android:textColor="@color/white"
             android:textSize="17sp"
             android:textStyle="bold"
