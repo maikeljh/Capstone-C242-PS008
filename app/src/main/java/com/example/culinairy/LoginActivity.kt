@@ -1,9 +1,17 @@
 package com.example.culinairy
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
 import com.example.culinairy.databinding.ActivityLoginBinding
+import com.example.culinairy.model.LoginRequestBody
+import com.example.culinairy.repository.AuthRepository
+import com.example.culinairy.utils.TokenManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 class LoginActivity : AppCompatActivity() {
 
@@ -37,7 +45,30 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun login(email: String, password: String) {
-        navigateToMain()
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val response = AuthRepository().login(LoginRequestBody(email, password))
+                if (response.isSuccessful) {
+                    Log.d("Sign In Activity - Login", "JWT TOKEN : ${response.body()?.token}")
+                    val token = response.body()?.token ?: return@launch
+                    val exp = response.body()?.exp ?: return@launch
+                    TokenManager.saveExpToken(this@LoginActivity, exp)
+                    TokenManager.saveEncryptedToken(this@LoginActivity, token)
+                    Toast.makeText(this@LoginActivity, "Login success.", Toast.LENGTH_SHORT).show()
+                    Log.d("Sign In Activity - Login", "Login success")
+                    navigateToMain()
+                } else {
+                    Toast.makeText(this@LoginActivity, "Login failed. Please check your credentials.", Toast.LENGTH_SHORT).show()
+                    Log.e("Sign In Activity - Login", "Login failed. Please check your credentials.")
+                }
+            } catch (e: HttpException) {
+                Toast.makeText(this@LoginActivity, "Login failed. ${e.message}", Toast.LENGTH_SHORT).show()
+                Log.e("Sign In Activity - Login", "Login failed. Http exception: ", e)
+            } catch (e: Throwable) {
+                Toast.makeText(this@LoginActivity, "Login failed. ${e.message}", Toast.LENGTH_SHORT).show()
+                Log.e("Sign In Activity - Login", "Login failed. Throwable: ", e)
+            }
+        }
     }
 
     private fun navigateToMain() {

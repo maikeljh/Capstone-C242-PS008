@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -15,6 +17,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        val properties = Properties()
+        properties.load(rootProject.file("local.properties").inputStream())
+
+        buildConfigField("String", "BASE_URL", "\"${properties.getProperty("BASE_URL")}\"")
     }
 
     buildTypes {
@@ -35,6 +41,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -61,4 +68,9 @@ dependencies {
     implementation(libs.androidx.camera.view)
     
     implementation(libs.mpandroidchart)
+
+    // Retrofit
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.okhttp)
 }
