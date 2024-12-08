@@ -14,4 +14,5 @@
     <color name="placeholder_text">#FF999999</color>
     <color name="button">#FF033F3F</color>
     <color name="green_500">#033F3F</color>
+    <color name="red">#EB5757</color>
 </resources>
