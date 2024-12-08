@@ -3,6 +3,7 @@ package com.example.culinairy
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -17,6 +18,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var fab: FloatingActionButton
     private lateinit var navController: NavController
+    private val noBackPressFragments = setOf(
+        R.id.navigation_home,
+        R.id.navigation_capture_receipt_success
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,19 +74,28 @@ class MainActivity : AppCompatActivity() {
                 if (isHandled) updateBottomNavSelection(item.itemId)
             }
         }
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val currentDestinationId = navController.currentDestination?.id
+                if (currentDestinationId in noBackPressFragments) {
+                    // Disable back press
+                } else {
+                    if (!navController.navigateUp()) {
+                        finish()
+                    } else {
+                        updateBottomNavSelection(
+                            navController.currentDestination?.id ?: R.id.navigation_home
+                        )
+                    }
+                }
+            }
+        })
     }
 
-    private fun updateBottomNavSelection(itemId: Int) {
+    fun updateBottomNavSelection(itemId: Int) {
         val navView: BottomNavigationView = binding.navView
         navView.menu.findItem(itemId).isChecked = true
-    }
-
-    override fun onBackPressed() {
-        if (!navController.navigateUp()) {
-            super.onBackPressed()
-        } else {
-            updateBottomNavSelection(navController.currentDestination?.id ?: R.id.navigation_home)
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
