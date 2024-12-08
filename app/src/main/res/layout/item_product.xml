@@ -18,6 +18,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <EditText
+        android:id="@+id/itemTextEdit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:autofillHints="Item Name"
+        android:background="@drawable/input_container"
+        android:fontFamily="@font/poppins"
+        android:hint="Item name"
+        android:textColorHint="@color/gray"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="0dp"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/priceText"
         android:layout_width="wrap_content"
@@ -34,6 +58,30 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <EditText
+        android:id="@+id/priceTextEdit"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppins"
+        android:hint="0"
+        android:textColorHint="@color/gray"
+        android:inputType="number"
+        android:maxLines="1"
+        android:autofillHints="Price"
+        android:background="@drawable/input_container"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="0dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintTop_toBottomOf="@id/itemTextEdit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/quantityText"
         android:layout_width="wrap_content"
@@ -49,6 +97,47 @@
         app:layout_constraintHorizontal_bias="0.60"
         app:layout_constraintStart_toEndOf="@+id/priceText" />
 
+    <LinearLayout
+        android:id="@+id/quantityTextEditContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/totalPriceTextEdit"
+        app:layout_constraintHorizontal_bias="0.85"
+        app:layout_constraintStart_toEndOf="@+id/priceTextEdit"
+        android:visibility="gone" >
+
+        <EditText
+            android:id="@+id/quantityTextEdit"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:fontFamily="@font/poppins"
+            android:textAlignment="center"
+            android:hint="0"
+            android:textColorHint="@color/gray"
+            android:inputType="number"
+            android:maxLines="1"
+            android:autofillHints="Quantity"
+            android:background="@drawable/input_container"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="0dp"
+            android:textStyle="bold"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="x"
+            android:layout_marginStart="3dp"
+            android:textSize="14sp"
+            android:fontFamily="@font/poppins"
+            android:textStyle="bold"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/totalPriceText"
         android:layout_width="wrap_content"
@@ -62,6 +151,29 @@
         android:layout_marginEnd="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <EditText
+        android:id="@+id/totalPriceTextEdit"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppins"
+        android:textAlignment="textEnd"
+        android:hint="0"
+        android:textColorHint="@color/gray"
+        android:inputType="number"
+        android:maxLines="1"
+        android:autofillHints="Total Price"
+        android:background="@drawable/input_container"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="0dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone" />
 
     <View
         android:id="@+id/dottedLine"
