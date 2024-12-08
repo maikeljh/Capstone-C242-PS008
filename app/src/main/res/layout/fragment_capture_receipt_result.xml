@@ -1,0 +1,160 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.capture_ocr_result.CaptureReceiptResultFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/receiptContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/rounded_container"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:elevation="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/confirmButton" >
+
+        <TextView
+            android:id="@+id/strukText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/struk"
+            android:fontFamily="@font/poppins"
+            android:textStyle="bold"
+            android:textColor="@color/green_500"
+            app:layout_constraintTop_toTopOf="@id/receiptContainer"
+            app:layout_constraintStart_toStartOf="@id/receiptContainer"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="15dp"
+            />
+
+        <View
+            android:id="@+id/horizontalLine1"
+            android:layout_width="0dp"
+            android:layout_height="1.5dp"
+            android:background="@color/gray"
+            app:layout_constraintStart_toStartOf="@id/receiptContainer"
+            app:layout_constraintEnd_toEndOf="@id/receiptContainer"
+            app:layout_constraintTop_toBottomOf="@id/strukText"
+            android:layout_marginTop="10dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/productList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/receiptContainer"
+            app:layout_constraintEnd_toEndOf="@id/receiptContainer"
+            app:layout_constraintTop_toBottomOf="@id/horizontalLine1"
+            app:layout_constraintBottom_toTopOf="@id/horizontalLine2"
+            />
+
+        <View
+            android:id="@+id/horizontalLine2"
+            android:layout_width="0dp"
+            android:layout_height="1.5dp"
+            android:background="@color/gray"
+            app:layout_constraintStart_toStartOf="@id/receiptContainer"
+            app:layout_constraintEnd_toEndOf="@id/receiptContainer"
+            app:layout_constraintBottom_toTopOf="@id/totalHargaText"
+            android:layout_marginBottom="15dp" />
+
+        <TextView
+            android:id="@+id/totalHargaText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total_harga"
+            android:fontFamily="@font/poppins"
+            android:textStyle="bold"
+            android:textColor="@color/green_500"
+            app:layout_constraintBottom_toBottomOf="@id/receiptContainer"
+            app:layout_constraintStart_toStartOf="@id/receiptContainer"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="15dp"
+            />
+
+        <TextView
+            android:id="@+id/totalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rp0"
+            android:fontFamily="@font/poppins"
+            android:textStyle="bold"
+            android:textColor="@color/green_500"
+            app:layout_constraintBottom_toBottomOf="@id/receiptContainer"
+            app:layout_constraintEnd_toEndOf="@id/receiptContainer"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="15dp"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/editButton"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="100dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/receiptContainer"
+        app:layout_constraintWidth_percent="0.40" >
+
+        <ImageView
+            android:id="@+id/editButtonBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_outlined_button"
+            android:contentDescription="@string/edit_struk"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/editButtonText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_struk"
+            android:textColor="#544931"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/poppins"
+            android:gravity="center"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/confirmButton"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="100dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/receiptContainer"
+        app:layout_constraintWidth_percent="0.40" >
+
+        <ImageView
+            android:id="@+id/confirmButtonBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_button"
+            android:contentDescription="@string/konfirmasi"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/confirmButtonText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/konfirmasi"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/poppins"
+            android:gravity="center"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
