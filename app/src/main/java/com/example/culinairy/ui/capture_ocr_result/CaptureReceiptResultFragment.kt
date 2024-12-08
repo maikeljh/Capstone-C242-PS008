@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.culinairy.Adapter.ProductReceiptAdapter
@@ -86,7 +87,8 @@ class CaptureReceiptResultFragment : Fragment() {
             }
         }
         binding.confirmButton.setOnClickListener {
-            Log.d("CaptureReceiptResultFragment", "Confirm button clicked")
+            // Navigate to success fragment
+            findNavController().navigate(R.id.action_captureReceiptResultFragment_to_captureReceiptSuccessFragment)
         }
     }
 

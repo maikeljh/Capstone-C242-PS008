@@ -55,6 +55,14 @@
     <string name="rp0">Rp0</string>
     <string name="item_0kg">Item 0kg</string>
     <string name="_0x">0x</string>
+    <string name="item_name">Item name</string>
+    <string name="_0">0</string>
+    <string name="x">x</string>
+
+    <!--   Capture Receipt Success   -->
+    <string name="success">Success</string>
+    <string name="struk_pembelanjaan_berhasil_ndisimpan_di_aplikasi">Struk pembelanjaan berhasil\ndisimpan di aplikasi</string>
+    <string name="kembali_ke_home">Kembali ke home</string>
 
     <!--   Item Product   -->
 </resources>
