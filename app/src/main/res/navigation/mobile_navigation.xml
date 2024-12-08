@@ -23,7 +23,7 @@
         android:label="@string/title_capture_receipt"
         tools:layout="@layout/fragment_capture_receipt" >
         <action
-            android:id="@+id/action_captureReceiptFragment_to_resultFragment"
+            android:id="@+id/action_captureReceiptFragment_to_captureReceiptResultFragment"
             app:destination="@id/navigation_capture_receipt_result" />
     </fragment>
 
@@ -31,7 +31,21 @@
         android:id="@+id/navigation_capture_receipt_result"
         android:name="com.example.culinairy.ui.capture_ocr_result.CaptureReceiptResultFragment"
         android:label="Hasil Scan"
-        tools:layout="@layout/fragment_capture_receipt_result" />
+        tools:layout="@layout/fragment_capture_receipt_result" >
+        <action
+            android:id="@+id/action_captureReceiptResultFragment_to_captureReceiptSuccessFragment"
+            app:destination="@id/navigation_capture_receipt_success" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_capture_receipt_success"
+        android:name="com.example.culinairy.ui.capture_ocr_success.CaptureReceiptSuccessFragment"
+        android:label="Berhasil"
+        tools:layout="@layout/fragment_capture_receipt_success" >
+        <action
+            android:id="@+id/action_captureReceiptSuccessFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_product"

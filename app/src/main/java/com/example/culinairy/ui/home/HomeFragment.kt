@@ -1,5 +1,6 @@
 package com.example.culinairy.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.culinairy.R
 import com.example.culinairy.databinding.FragmentHomeBinding
+import com.example.culinairy.ListTransactionActivity
 
 class HomeFragment : Fragment() {
 
@@ -87,11 +89,17 @@ class HomeFragment : Fragment() {
                 (this as? ViewGroup.MarginLayoutParams)?.topMargin = 64
             }
         }
+
+        seeAllTextView.setOnClickListener {
+            val intent = Intent(requireContext(), ListTransactionActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.transactionContainer.addView(seeAllTextView)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // Avoid memory leaks
+        _binding = null
     }
 }

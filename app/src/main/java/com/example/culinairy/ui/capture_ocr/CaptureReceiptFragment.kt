@@ -63,7 +63,7 @@ class CaptureReceiptFragment : Fragment(), ImageCaptureCallback {
         _binding = FragmentCaptureReceiptBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        // remove navbar
+        // Remove navbar
         val navView: BottomNavigationView = requireActivity().findViewById(R.id.nav_view)
         navView.visibility = View.GONE
         val fab: FloatingActionButton = requireActivity().findViewById(R.id.fab)
@@ -122,7 +122,8 @@ class CaptureReceiptFragment : Fragment(), ImageCaptureCallback {
         binding.confirmButton.setOnClickListener {
             val bitmap = (binding.overlay.drawable as? BitmapDrawable)?.bitmap
 
-            findNavController().navigate(R.id.action_captureReceiptFragment_to_resultFragment)
+            // Navigate to result fragment
+            findNavController().navigate(R.id.action_captureReceiptFragment_to_captureReceiptResultFragment)
         }
     }
 
