@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.culinairy.Adapter.ProductReceiptAdapter
 import com.example.culinairy.R
@@ -42,6 +43,11 @@ class ProductFragment : Fragment() {
         productAdapter = ProductReceiptAdapter(productList)
         recyclerView.adapter = productAdapter
 
+        // Set up the "Add Product" button
+        binding.addProductButton.setOnClickListener {
+            // Navigate to the Create Product Fragment
+            findNavController().navigate(R.id.action_productFragment_to_createProductFragment)
+        }
         return root
     }
 
