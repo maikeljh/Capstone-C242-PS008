@@ -47,13 +47,6 @@ class CaptureReceiptFragment : Fragment(), ImageCaptureCallback {
     private var imageCapture: ImageCapture? = null
 
 
-    override fun onResume() {
-        super.onResume()
-        if (allPermissionGranted(context)) {
-            cameraManager.startCamera()
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -91,6 +84,21 @@ class CaptureReceiptFragment : Fragment(), ImageCaptureCallback {
 
         // Back button
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // Check camera permission
+        if (allPermissionGranted(context)) {
+            cameraManager.startCamera()
+        }
+
+        // Remove navbar
+        val navView: BottomNavigationView = requireActivity().findViewById(R.id.nav_view)
+        navView.visibility = View.GONE
+        val fab: FloatingActionButton = requireActivity().findViewById(R.id.fab)
+        fab.visibility = View.GONE
     }
 
     override fun onDestroyView() {
