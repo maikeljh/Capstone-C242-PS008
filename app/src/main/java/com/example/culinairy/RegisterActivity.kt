@@ -26,16 +26,28 @@ class RegisterActivity : AppCompatActivity() {
         _binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.textView5.setOnClickListener {
+            navigateToLogin()
+        }
+
         binding.registerButton.setOnClickListener {
             val name = binding.namaEt.text.toString().trim()
             val email = binding.emailEt.text.toString().trim()
             val password = binding.passEt.text.toString().trim()
             val address = binding.posisiEt.text.toString().trim()
 
+            val isEmailValid = isValidEmail(email)
+            val isPasswordValid = isValidPassword(password)
+
             if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && address.isNotEmpty()) {
-                register(name, email, password, address)
+                if (isEmailValid && isPasswordValid) {
+                    register(name, email, password, address)
+                }
+                else {
+                    Toast.makeText(this, "Please insert a valid email and a minimum 6 chars password", Toast.LENGTH_SHORT).show()
+                }
             } else {
-                Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter name, email, password, and address", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -66,5 +78,15 @@ class RegisterActivity : AppCompatActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
+        return emailRegex.matches(email)
+    }
+
+    private fun isValidPassword(password: String): Boolean {
+        val passwordRegex = "^.{6,}$".toRegex()
+        return passwordRegex.matches(password)
     }
 }
