@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class EditProfileViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
     private val _name = MutableLiveData<String>("Jhonson King")
     val name: LiveData<String> get() = _name
 

@@ -4,7 +4,6 @@ import retrofit2.Response
 import com.example.culinairy.model.*
 import com.example.culinairy.services.AuthService
 import com.example.culinairy.services.RetrofitInstance
-import okhttp3.MultipartBody
 
 class AuthRepository {
 
@@ -16,5 +15,13 @@ class AuthRepository {
 
     suspend fun register(registerBody: RegisterRequestBody): Response<RegisterResponse> {
         return authService.register(registerBody)
+    }
+
+    suspend fun getUser(token: String): Response<RegisterResponse> {
+        return authService.getUser(token)
+    }
+
+    suspend fun updateUser(token: String, updateUserBody: UpdateUserRequestBody): Response<RegisterResponse> {
+        return authService.updateUser(token, updateUserBody)
     }
 }
