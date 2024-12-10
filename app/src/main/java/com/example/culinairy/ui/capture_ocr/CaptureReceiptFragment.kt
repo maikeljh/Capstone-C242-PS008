@@ -10,6 +10,7 @@ import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,17 +18,25 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.internal.utils.ImageUtil.rotateBitmap
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.culinairy.MainActivity
 import com.example.culinairy.R
 import com.example.culinairy.databinding.FragmentCaptureReceiptBinding
 import com.example.culinairy.utils.CameraManager
 import com.example.culinairy.utils.CameraManager.Companion.allPermissionGranted
 import com.example.culinairy.utils.ImageCaptureCallback
+import com.example.culinairy.utils.TokenManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -35,32 +44,21 @@ import java.util.concurrent.Executors
 class CaptureReceiptFragment : Fragment(), ImageCaptureCallback {
 
     private var _binding: FragmentCaptureReceiptBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
-    // Variables
+    private lateinit var captureReceiptViewModel: CaptureReceiptViewModel
     private lateinit var cameraManager: CameraManager
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
     private var imageCapture: ImageCapture? = null
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val captureReceiptViewModel = ViewModelProvider(this)[CaptureReceiptViewModel::class.java]
+        captureReceiptViewModel = ViewModelProvider(this)[CaptureReceiptViewModel::class.java]
         _binding = FragmentCaptureReceiptBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        // Remove navbar
-        val navView: BottomNavigationView = requireActivity().findViewById(R.id.nav_view)
-        navView.visibility = View.GONE
-        val fab: FloatingActionButton = requireActivity().findViewById(R.id.fab)
-        fab.visibility = View.GONE
 
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -76,7 +74,7 @@ class CaptureReceiptFragment : Fragment(), ImageCaptureCallback {
         // Set up button listeners
         setupButtonListeners()
 
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,15 +82,13 @@ class CaptureReceiptFragment : Fragment(), ImageCaptureCallback {
 
         // Back button
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        // Observe ViewModel LiveData
+        setupObservers()
     }
 
     override fun onResume() {
         super.onResume()
-
-        // Check camera permission
-        if (allPermissionGranted(context)) {
-            cameraManager.startCamera()
-        }
 
         // Remove navbar
         val navView: BottomNavigationView = requireActivity().findViewById(R.id.nav_view)
@@ -105,33 +101,85 @@ class CaptureReceiptFragment : Fragment(), ImageCaptureCallback {
         super.onDestroyView()
         _binding = null
 
+        // Show navbar back
         val navView: BottomNavigationView = requireActivity().findViewById(R.id.nav_view)
         navView.visibility = View.VISIBLE
-        val fab: FloatingActionButton = requireActivity().findViewById(com.example.culinairy.R.id.fab)
+        val fab: FloatingActionButton = requireActivity().findViewById(R.id.fab)
         fab.visibility = View.VISIBLE
     }
 
+    // Set up observers
+    private fun setupObservers() {
+        captureReceiptViewModel.ocrResponse.observe(viewLifecycleOwner) { response ->
+            response?.let {
+                // Log the response
+                Log.d("CaptureReceiptFragment", "OCR Response: $it")
+
+                // Navigate to result fragment
+                val args = Bundle()
+                args.putString("ocr_response", it.toString())
+                findNavController().navigate(
+                    R.id.action_captureReceiptFragment_to_captureReceiptResultFragment,
+                    args
+                )
+
+                // Clear OCR response
+                captureReceiptViewModel.clearOcrResponse()
+            }
+        }
+
+        captureReceiptViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.darkOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.loadingAnimation.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.retakeButton.isEnabled = !isLoading
+            binding.confirmButton.isEnabled = !isLoading
+        }
+
+        captureReceiptViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     // Set up button listeners
     private fun setupButtonListeners() {
-        binding.cameraButton.setOnClickListener {
-            takePhoto()
-        }
-        binding.galleryButton.setOnClickListener {
-            pickFromGallery()
-        }
+        binding.cameraButton.setOnClickListener { takePhoto() }
+        binding.galleryButton.setOnClickListener { pickFromGallery() }
         binding.retakeButton.setOnClickListener {
             binding.overlay.setImageBitmap(null)
-            binding.retakeButton.visibility = View.GONE
-            binding.confirmButton.visibility = View.GONE
-            binding.cameraButton.visibility = View.VISIBLE
-            binding.galleryButton.visibility = View.VISIBLE
+            toggleButtonsVisibility(isPreview = false)
         }
         binding.confirmButton.setOnClickListener {
             val bitmap = (binding.overlay.drawable as? BitmapDrawable)?.bitmap
+            if (bitmap != null) {
+                processImage(bitmap)
+            } else {
+                Toast.makeText(requireContext(), "No image to confirm", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
-            // Navigate to result fragment
-            findNavController().navigate(R.id.action_captureReceiptFragment_to_captureReceiptResultFragment)
+    // Toggle buttons visibility
+    private fun toggleButtonsVisibility(isPreview: Boolean) {
+        binding.retakeButton.visibility = if (isPreview) View.VISIBLE else View.GONE
+        binding.confirmButton.visibility = if (isPreview) View.VISIBLE else View.GONE
+        binding.cameraButton.visibility = if (isPreview) View.GONE else View.VISIBLE
+        binding.galleryButton.visibility = if (isPreview) View.GONE else View.VISIBLE
+    }
+
+    // Process the image with OCR
+    private fun processImage(bitmap: Bitmap) {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        val imageData = byteArrayOutputStream.toByteArray()
+        val requestFile = imageData.toRequestBody("image/jpeg".toMediaTypeOrNull())
+        val body = MultipartBody.Part.createFormData("image", "image.jpg", requestFile)
+
+        val mainActivity = requireActivity() as MainActivity
+        val token = TokenManager.retrieveToken(mainActivity)
+        if (token != null) {
+            captureReceiptViewModel.processReceipt(token, body)
         }
     }
 
@@ -165,10 +213,7 @@ class CaptureReceiptFragment : Fragment(), ImageCaptureCallback {
                     val rotatedBitmap = rotateBitmap(bitmap, orientation)
                     binding.overlay.setImageBitmap(rotatedBitmap)
 
-                    binding.retakeButton.visibility = View.VISIBLE
-                    binding.confirmButton.visibility = View.VISIBLE
-                    binding.cameraButton.visibility = View.GONE
-                    binding.galleryButton.visibility = View.GONE
+                    toggleButtonsVisibility(isPreview = true)
                 }
             }
         )
@@ -205,10 +250,7 @@ class CaptureReceiptFragment : Fragment(), ImageCaptureCallback {
                     val rotatedBitmap = rotateBitmap(bitmap, orientation)
 
                     binding.overlay.setImageBitmap(rotatedBitmap)
-                    binding.retakeButton.visibility = View.VISIBLE
-                    binding.confirmButton.visibility = View.VISIBLE
-                    binding.cameraButton.visibility = View.GONE
-                    binding.galleryButton.visibility = View.GONE
+                    toggleButtonsVisibility(isPreview = true)
 
                 } catch (e: Exception) {
                     e.printStackTrace()
