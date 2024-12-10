@@ -34,9 +34,9 @@ class ProductFragment : Fragment() {
 
         // Dummy data for the products
         val productList = listOf(
-            Product("Item 1", 1, 10000.0, 10000.0),
-            Product("Item 2", 2, 20000.0, 40000.0),
-            Product("Item 3", 3, 15000.0, 45000.0)
+            Product("Item 1", 1, 10000, 10000),
+            Product("Item 2", 2, 20000, 40000),
+            Product("Item 3", 3, 15000, 45000)
         )
 
         // Initialize and set the adapter
