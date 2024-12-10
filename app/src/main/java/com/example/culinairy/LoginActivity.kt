@@ -45,6 +45,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun login(email: String, password: String) {
+
+        setButtonsEnabled(false)
+
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val response = AuthRepository().login(LoginRequestBody(email, password))
@@ -67,6 +70,8 @@ class LoginActivity : AppCompatActivity() {
             } catch (e: Throwable) {
                 Toast.makeText(this@LoginActivity, "Login failed. ${e.message}", Toast.LENGTH_SHORT).show()
                 Log.e("Sign In Activity - Login", "Login failed. Throwable: ", e)
+            } finally {
+                setButtonsEnabled(true)
             }
         }
     }
@@ -81,5 +86,11 @@ class LoginActivity : AppCompatActivity() {
         val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    private fun setButtonsEnabled(isEnabled: Boolean) {
+        binding.loginButton.isEnabled = isEnabled
+        binding.registerButton.isEnabled = isEnabled
+        binding.googleButton.isEnabled = isEnabled
     }
 }
