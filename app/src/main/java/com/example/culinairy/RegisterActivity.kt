@@ -4,21 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.culinairy.databinding.ActivityRegisterBinding
-import com.example.culinairy.model.LoginRequestBody
-import com.example.culinairy.model.RegisterRequestBody
-import com.example.culinairy.repository.AuthRepository
-import com.example.culinairy.utils.TokenManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.HttpException
+import com.example.culinairy.ui.register.RegisterViewModel
+import androidx.lifecycle.Observer
 
 class RegisterActivity : AppCompatActivity() {
 
     private var _binding: ActivityRegisterBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: RegisterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,42 +32,37 @@ class RegisterActivity : AppCompatActivity() {
             val password = binding.passEt.text.toString().trim()
             val address = binding.posisiEt.text.toString().trim()
 
-            val isEmailValid = isValidEmail(email)
-            val isPasswordValid = isValidPassword(password)
-
             if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && address.isNotEmpty()) {
-                if (isEmailValid && isPasswordValid) {
-                    register(name, email, password, address)
-                }
-                else {
+                if (isValidEmail(email) && isValidPassword(password)) {
+                    viewModel.register(name, email, password, address)
+                    toggleButtonState(false)
+                } else {
                     Toast.makeText(this, "Please insert a valid email and a minimum 6 chars password", Toast.LENGTH_SHORT).show()
                 }
             } else {
                 Toast.makeText(this, "Please enter name, email, password, and address", Toast.LENGTH_SHORT).show()
             }
         }
+
+        // Observe registration status
+        viewModel.registrationStatus.observe(this, Observer { success ->
+            if (success) {
+                Toast.makeText(this, "Registration successful.", Toast.LENGTH_SHORT).show()
+                navigateToLogin()
+            }
+            toggleButtonState(true)
+        })
+
+        // Observe errors
+        viewModel.errorMessage.observe(this, Observer { message ->
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            toggleButtonState(true)
+        })
     }
 
-    private fun register(name: String, email: String, password: String, address: String) {
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val response = AuthRepository().register(RegisterRequestBody(name, email, password, address))
-                if (response.isSuccessful) {
-                    Toast.makeText(this@RegisterActivity, "Register success.", Toast.LENGTH_SHORT).show()
-                    Log.d("Register Activity - Register", "Register success")
-                    navigateToLogin()
-                } else {
-                    Toast.makeText(this@RegisterActivity, "Register failed. Please check your credentials.", Toast.LENGTH_SHORT).show()
-                    Log.e("Register Activity - Register", "Register failed. Please check your credentials.")
-                }
-            } catch (e: HttpException) {
-                Toast.makeText(this@RegisterActivity, "Register failed. ${e.message}", Toast.LENGTH_SHORT).show()
-                Log.e("Register Activity - Register", "Register failed. Http exception: ", e)
-            } catch (e: Throwable) {
-                Toast.makeText(this@RegisterActivity, "Register failed. ${e.message}", Toast.LENGTH_SHORT).show()
-                Log.e("Register Activity - Register", "Register failed. Throwable: ", e)
-            }
-        }
+    private fun toggleButtonState(enabled: Boolean) {
+        binding.registerButton.isEnabled = enabled
+        binding.textView5.isEnabled = enabled
     }
 
     private fun navigateToLogin() {

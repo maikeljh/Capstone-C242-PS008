@@ -1,37 +1,45 @@
-package com.example.culinairy.ui.capture_ocr
+package com.example.culinairy.ui.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.example.culinairy.MainActivity
+import com.example.culinairy.R
 import com.example.culinairy.databinding.FragmentProfileBinding
+import com.example.culinairy.ui.profile.ProfileViewModel
+import com.example.culinairy.utils.LogoutManager
 
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+    private val viewModel: ProfileViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val notificationsViewModel =
+        val profileViewModel =
             ViewModelProvider(this).get(ProfileViewModel::class.java)
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textProfile
-        notificationsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        binding.menuLogout.setOnClickListener {
+            val mainActivity = requireActivity() as MainActivity
+            LogoutManager.logout(mainActivity)
         }
+
+        binding.editProfileButton.setOnClickListener {
+            findNavController().navigate(R.id.navigation_profile_edit)
+        }
+
         return root
     }
 

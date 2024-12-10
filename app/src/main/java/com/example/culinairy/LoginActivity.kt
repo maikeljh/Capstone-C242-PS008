@@ -1,22 +1,17 @@
 package com.example.culinairy
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
+import androidx.activity.viewModels
 import com.example.culinairy.databinding.ActivityLoginBinding
-import com.example.culinairy.model.LoginRequestBody
-import com.example.culinairy.repository.AuthRepository
-import com.example.culinairy.utils.TokenManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.HttpException
+import com.example.culinairy.ui.login.LoginViewModel
 
 class LoginActivity : AppCompatActivity() {
 
     private var _binding: ActivityLoginBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +24,10 @@ class LoginActivity : AppCompatActivity() {
             val password = binding.passEt.text.toString().trim()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
-                login(email, password)
+                setButtonsEnabled(false)
+                viewModel.login(this@LoginActivity, email, password) { state ->
+                    handleLoginState(state)
+                }
             } else {
                 Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show()
             }
@@ -44,34 +42,21 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun login(email: String, password: String) {
-
-        setButtonsEnabled(false)
-
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val response = AuthRepository().login(LoginRequestBody(email, password))
-                if (response.isSuccessful) {
-                    Log.d("Sign In Activity - Login", "JWT TOKEN : ${response.body()?.token}")
-                    val token = response.body()?.token ?: return@launch
-                    val exp = response.body()?.exp ?: return@launch
-                    TokenManager.saveExpToken(this@LoginActivity, exp)
-                    TokenManager.saveEncryptedToken(this@LoginActivity, token)
-                    Toast.makeText(this@LoginActivity, "Login success.", Toast.LENGTH_SHORT).show()
-                    Log.d("Sign In Activity - Login", "Login success")
-                    navigateToMain()
-                } else {
-                    Toast.makeText(this@LoginActivity, "Login failed. Please check your credentials.", Toast.LENGTH_SHORT).show()
-                    Log.e("Sign In Activity - Login", "Login failed. Please check your credentials.")
-                }
-            } catch (e: HttpException) {
-                Toast.makeText(this@LoginActivity, "Login failed. ${e.message}", Toast.LENGTH_SHORT).show()
-                Log.e("Sign In Activity - Login", "Login failed. Http exception: ", e)
-            } catch (e: Throwable) {
-                Toast.makeText(this@LoginActivity, "Login failed. ${e.message}", Toast.LENGTH_SHORT).show()
-                Log.e("Sign In Activity - Login", "Login failed. Throwable: ", e)
-            } finally {
-                setButtonsEnabled(true)
+    private fun handleLoginState(state: LoginViewModel.LoginState) {
+        setButtonsEnabled(true)
+        when (state) {
+            is LoginViewModel.LoginState.Success -> {
+                Toast.makeText(this, "Login successful.", Toast.LENGTH_SHORT).show()
+                navigateToMain()
+            }
+            is LoginViewModel.LoginState.Failure -> {
+                Toast.makeText(this, "Login failed. Please check your credentials.", Toast.LENGTH_SHORT).show()
+            }
+            is LoginViewModel.LoginState.Error -> {
+                Toast.makeText(this, state.message, Toast.LENGTH_SHORT).show()
+            }
+            is LoginViewModel.LoginState.InvalidCredentials -> {
+                Toast.makeText(this, "Invalid credentials.", Toast.LENGTH_SHORT).show()
             }
         }
     }
