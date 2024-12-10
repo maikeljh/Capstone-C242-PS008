@@ -138,7 +138,7 @@ object TokenManager {
 
     private suspend fun checkTokenExpiry(context: Context, jwtToken: String): Boolean {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
-        val tokenExpiry = sharedPreferences.getLong("token_expiry", 0L)
+        val tokenExpiry = sharedPreferences.getLong("exp", 0L)
         val currentTimeSeconds = System.currentTimeMillis() / 1000
         if (tokenExpiry < currentTimeSeconds) {
             LogoutManager.logout(context)
