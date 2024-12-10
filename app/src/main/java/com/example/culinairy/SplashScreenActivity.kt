@@ -5,9 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.culinairy.databinding.ActivitySplashScreenBinding
-import com.example.culinairy.utils.TokenManager
+import com.example.culinairy.ui.splash.SplashViewModel
 import kotlinx.coroutines.launch
 
 class SplashScreenActivity : AppCompatActivity() {
@@ -15,6 +16,7 @@ class SplashScreenActivity : AppCompatActivity() {
     private val splashDisplay: Long = 3000
     private var _binding: ActivitySplashScreenBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: SplashViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +26,8 @@ class SplashScreenActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             lifecycleScope.launch {
-                if (TokenManager.checkToken(this@SplashScreenActivity)) {
+                val isTokenValid = viewModel.isTokenValid(this@SplashScreenActivity)
+                if (isTokenValid) {
                     navigateToMain()
                 } else {
                     navigateToLogin()

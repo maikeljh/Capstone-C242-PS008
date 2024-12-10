@@ -14,7 +14,6 @@ import com.example.culinairy.MainActivity
 import com.example.culinairy.R
 import com.example.culinairy.databinding.FragmentCaptureReceiptSuccessBinding
 import com.example.culinairy.databinding.FragmentProfileBinding
-import com.example.culinairy.ui.capture_ocr.ProfileViewModel
 import com.example.culinairy.ui.capture_ocr_result.CaptureReceiptResultViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton

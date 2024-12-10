@@ -11,9 +11,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.culinairy.Adapter.LabelAdapter
 import com.example.culinairy.R
 import com.example.culinairy.databinding.FragmentDashboardBinding
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.XAxis
@@ -48,7 +48,7 @@ class DashboardFragment : Fragment() {
 
         // Setup charts
         setupLineChart(binding.lineChart)
-        setupPieChart(binding.pieChart)
+        setupBarChart(binding.barChart)
 
         return root
     }
@@ -118,45 +118,51 @@ class DashboardFragment : Fragment() {
         lineChart.invalidate()
     }
 
-    private fun setupPieChart(pieChart: PieChart) {
-        // Example Data
+    private fun setupBarChart(barChart: BarChart) {
         val entries = listOf(
-            PieEntry(30f, "Ikan Gurame"),
-            PieEntry(30f, "Ikan Nila"),
-            PieEntry(10f, "Kepiting Besar"),
-            PieEntry(30f, "Cumi Besar")
+            BarEntry(0f, 120f),
+            BarEntry(1f, 95f),
+            BarEntry(2f, 85f),
+            BarEntry(3f, 80f),
+            BarEntry(4f, 75f)
         )
 
-        val pieDataSet = PieDataSet(entries, "")
+        val labels = listOf("Ikan Gurame", "Ikan Nila", "Kepiting Besar", "Cumi Besar", "Ikan Mas")
         val colors = listOf(
-            Color.parseColor("#F5CBA7"), // Ikan Gurame
-            Color.parseColor("#5DADE2"), // Ikan Nila
-            Color.parseColor("#34495E"), // Kepiting Besar
-            Color.parseColor("#A93226")  // Cumi Besar
+            Color.parseColor("#F5CBA7"),
+            Color.parseColor("#5DADE2"),
+            Color.parseColor("#34495E"),
+            Color.parseColor("#A93226"),
+            Color.parseColor("#7DCEA0")
         )
-        pieDataSet.colors = colors
-        pieDataSet.valueTextSize = 0f // Hide percentage labels on the chart
 
-        val pieData = PieData(pieDataSet)
-        pieChart.data = pieData
+        val barDataSet = BarDataSet(entries, "Top 5 Products")
+        barDataSet.colors = colors
+        barDataSet.valueTextSize = 12f
+        barDataSet.valueTextColor = Color.BLACK
 
-        // Customize the chart
-        pieChart.isDrawHoleEnabled = true
-        pieChart.holeRadius = 65f // Thin donut ring
-        pieChart.transparentCircleRadius = 70f
-        pieChart.setDrawEntryLabels(false) // Hide labels on the chart
-        pieChart.description.isEnabled = false
-        pieChart.legend.isEnabled = false
-        pieChart.animateY(1000)
+        val barData = BarData(barDataSet)
+        barData.barWidth = 0.3f // Reduce bar width for better spacing
+        barChart.data = barData
 
-        // Dynamically generate the labels
-        generateLabels(entries, colors)
-    }
+        val xAxis = barChart.xAxis
+        xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.textSize = 10f // Smaller text size
+        xAxis.textColor = Color.parseColor("#6C757D")
+        xAxis.setDrawGridLines(false)
+        xAxis.granularity = 1f
+        xAxis.isGranularityEnabled = true
+        xAxis.labelRotationAngle = 45f // Rotate labels to avoid overlap
 
-    private fun generateLabels(entries: List<PieEntry>, colors: List<Int>) {
-        val adapter = LabelAdapter(entries, colors)
-        binding.labelRecyclerView.adapter = adapter
-        binding.labelRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        barChart.axisLeft.axisMinimum = 0f
+        barChart.axisRight.isEnabled = false
+        barChart.legend.isEnabled = false
+        barChart.description.isEnabled = false
+        barChart.setExtraOffsets(10f, 10f, 10f, 30f) // Add padding to bottom
+        barChart.animateY(1000)
+
+        barChart.invalidate()
     }
 
     override fun onDestroyView() {

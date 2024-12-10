@@ -16,6 +16,13 @@
     <string name="input_placeholder_satuan">Pilih satuan</string>
     <string name="input_placeholder_harga">Masukkan harga satuan</string>
 
+    <!--   Profile Page   -->
+    <string name="profile_image">Profile Image</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="logout">Logout</string>
+    <string name="simpan_perubahan">Simpan Perubahan</string>
+    <string name="title_profile_edit">Edit Profile</string>
+
     <!--   Login Page   -->
     <string name="email">Email</string>
     <string name="password">Password</string>
