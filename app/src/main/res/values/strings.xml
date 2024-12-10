@@ -29,12 +29,13 @@
     <string name="logo">logo</string>
 
     <!--   Register Page   -->
-    <string name="posisi">Posisi</string>
+    <string name="posisi">Alamat</string>
     <string name="nama_placeholder">masukkan nama</string>
-    <string name="posisi_placeholder">masukkan posisi</string>
+    <string name="posisi_placeholder">masukkan alamat</string>
     <string name="tandc">I agree with terms and condition</string>
     <string name="email_placeholder_2">masukkan email</string>
     <string name="password_placeholder_2">massukan password</string>
+    <string name="return_to_login"><u>Return to login</u></string>
 
     <string name="title_product">Product</string>
     <string name="title_profile">Profile</string>

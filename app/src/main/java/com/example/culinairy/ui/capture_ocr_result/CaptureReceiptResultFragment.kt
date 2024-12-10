@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +19,8 @@ import com.example.culinairy.Adapter.ProductReceiptAdapter
 import com.example.culinairy.R
 import com.example.culinairy.databinding.FragmentCaptureReceiptResultBinding
 import com.example.culinairy.model.Product
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class CaptureReceiptResultFragment : Fragment() {
 
@@ -68,6 +71,33 @@ class CaptureReceiptResultFragment : Fragment() {
         return root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Back button
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // Remove navbar
+        val navView: BottomNavigationView = requireActivity().findViewById(R.id.nav_view)
+        navView.visibility = View.GONE
+        val fab: FloatingActionButton = requireActivity().findViewById(R.id.fab)
+        fab.visibility = View.GONE
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+
+        val navView: BottomNavigationView = requireActivity().findViewById(R.id.nav_view)
+        navView.visibility = View.VISIBLE
+        val fab: FloatingActionButton = requireActivity().findViewById(com.example.culinairy.R.id.fab)
+        fab.visibility = View.VISIBLE
+    }
+
     // Set up button listeners
     private fun setupButtonListeners(productList: List<Product>) {
         binding.editButton.setOnClickListener {
@@ -90,10 +120,5 @@ class CaptureReceiptResultFragment : Fragment() {
             // Navigate to success fragment
             findNavController().navigate(R.id.action_captureReceiptResultFragment_to_captureReceiptSuccessFragment)
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }
