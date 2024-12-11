@@ -2,6 +2,7 @@ package com.example.culinairy.repository
 
 import com.example.culinairy.model.Transactions.Transaction
 import com.example.culinairy.model.TransactionOCR.OCRResponse
+import com.example.culinairy.model.Transactions.TransactionAllResponse
 import com.example.culinairy.services.RetrofitInstance
 import com.example.culinairy.services.TransactionService
 import okhttp3.MultipartBody
@@ -40,14 +41,13 @@ class TransactionRepository {
         }
     }
 
-    suspend fun fetchAllTransactions(token: String): Result<List<Transaction>> {
+    suspend fun fetchAllTransactions(token: String): Result<TransactionAllResponse> {
         return try {
-            val response = transactionService.getAllTransactions(token)
+            val response = transactionService.getAllTransactions(token) // Pass the token
             if (response.isSuccessful) {
                 val body = response.body()
                 if (body?.status == "success") {
-                    // Access the transactions list
-                    Result.Success(body.data.transactions)
+                    Result.Success(body)
                 } else {
                     Result.Error(body?.message ?: "Unknown error")
                 }

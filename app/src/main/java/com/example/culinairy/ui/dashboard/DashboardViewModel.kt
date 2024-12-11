@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.culinairy.model.Transactions.Transaction
+import com.example.culinairy.model.Transactions.TransactionAllResponse
 import com.example.culinairy.repository.TransactionRepository
 import kotlinx.coroutines.launch
 
@@ -16,8 +17,8 @@ class DashboardViewModel : ViewModel() {
     private val _transactionResult = MutableLiveData<TransactionRepository.Result<Transaction>>()
     val transactionResult: LiveData<TransactionRepository.Result<Transaction>> get() = _transactionResult
 
-    private val _transactionsResult = MutableLiveData<TransactionRepository.Result<List<Transaction>>>()
-    val transactionsResult: LiveData<TransactionRepository.Result<List<Transaction>>> get() = _transactionsResult
+    private val _transactionsResult = MutableLiveData<TransactionRepository.Result<TransactionAllResponse>>()
+    val transactionsResult: LiveData<TransactionRepository.Result<TransactionAllResponse>> get() = _transactionsResult
 
     fun loadTransactionById(id: String) {
         viewModelScope.launch {
@@ -29,9 +30,9 @@ class DashboardViewModel : ViewModel() {
 
     fun loadTransactions(token: String) {
         viewModelScope.launch {
-            _transactionsResult.postValue(TransactionRepository.Result.Loading) // Post Loading state
+            _transactionsResult.postValue(TransactionRepository.Result.Loading)
             val result = repository.fetchAllTransactions(token)
-            _transactionsResult.postValue(result) // Post Success or Error state
+            _transactionsResult.postValue(result)
         }
     }
 }

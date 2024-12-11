@@ -24,6 +24,8 @@ import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import java.text.NumberFormat
+import java.util.Locale
 
 class DashboardFragment : Fragment() {
 
@@ -55,7 +57,7 @@ class DashboardFragment : Fragment() {
         setupLineChart(binding.lineChart)
         setupBarChart(binding.barChart)
 
-        // Initialize DashboardViewModel without factory
+        // Initialize DashboardViewModel
         val dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
 
         // Observe data
@@ -63,12 +65,32 @@ class DashboardFragment : Fragment() {
             when (result) {
                 is TransactionRepository.Result.Loading -> {
                     android.util.Log.d("DashboardFragment", "Loading transactions...")
+                    binding.omsetValue.text = "Calculating..."
+                    binding.orderValue.text = "Calculating..."
                 }
                 is TransactionRepository.Result.Success -> {
-                    android.util.Log.d("DashboardFragment", "Transactions loaded successfully: ${result.data}")
+                    // Access the transactions and meta data
+                    val transactionAllResponse = result.data
+                    val transactions = transactionAllResponse.data.transactions // Access the transactions list
+                    val meta = transactionAllResponse.data.meta
+
+                    // Calculate the sum of total_price
+                    val totalOmset = transactions.sumOf { it.total_price }
+
+                    val formattedOmset = NumberFormat.getCurrencyInstance(Locale("in", "ID")).apply {
+                        maximumFractionDigits = 0
+                    }.format(totalOmset)
+
+                    // Update UI components
+                    binding.omsetValue.text = "$formattedOmset"
+                    binding.orderValue.text = meta.total.toString()
+
+                    android.util.Log.d("DashboardFragment", "Transactions loaded successfully: $transactions")
                 }
                 is TransactionRepository.Result.Error -> {
                     android.util.Log.e("DashboardFragment", "Error loading transactions: ${result.message}")
+                    binding.omsetValue.text = "Null"
+                    binding.orderValue.text = "Null"
                 }
             }
         }
