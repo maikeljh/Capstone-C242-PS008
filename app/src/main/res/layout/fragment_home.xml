@@ -1,166 +1,203 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F5F5F5"
-    android:padding="16dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="viewModel"
+            type="com.example.culinairy.ui.home.HomeViewModel" />
+    </data>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:background="#F5F5F5">
 
-        <TextView
-            android:id="@+id/greetingText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Halo Budi"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp"
-            android:textColor="#2C3333" />
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F5F5F5"
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="16dp"
-            android:weightSum="2">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:background="@drawable/card_background"
-                android:padding="16dp"
-                android:layout_marginEnd="8dp">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_wallet"
-                    android:layout_gravity="start"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:id="@+id/omsetLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Omset"
-                    android:textSize="14sp"
-                    android:textColor="#6C757D"
-                    android:layout_marginBottom="4dp"/>
-
-                <TextView
-                    android:id="@+id/omsetValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Rp5.560.000"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#2C3333" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:background="@drawable/card_background"
-                android:padding="16dp"
-                android:layout_marginStart="8dp">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_order"
-                    android:layout_gravity="start"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:id="@+id/orderLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Jumlah Order"
-                    android:textSize="14sp"
-                    android:textColor="#6C757D"
-                    android:layout_marginBottom="4dp" />
-
-                <TextView
-                    android:id="@+id/orderValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="375"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#2C3333" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/transactionContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="@drawable/card_background"
-            android:padding="16dp">
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/transactionHeader"
+                android:id="@+id/greetingText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Daftar Transaksi Terbaru"
-                android:textSize="16sp"
+                android:text="@{`Halo, ` + viewModel.name}"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 android:textColor="#2C3333" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_check"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="8dp" />
+                android:gravity="center"
+                android:layout_marginBottom="16dp"
+                android:weightSum="2">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:background="@drawable/card_background"
+                    android:padding="16dp"
+                    android:layout_marginEnd="8dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_wallet"
+                        android:layout_gravity="start"
+                        android:layout_marginBottom="8dp" />
 
                     <TextView
+                        android:id="@+id/omsetLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Payment from #1132"
+                        android:text="Omset"
                         android:textSize="14sp"
-                        android:textColor="#2C3333" />
+                        android:textColor="#6C757D"
+                        android:layout_marginBottom="4dp"/>
 
                     <TextView
+                        android:id="@+id/omsetValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hari ini, 24 November 2024 - 20:13"
-                        android:textSize="12sp"
-                        android:textColor="#6C757D" />
+                        android:text="@{`Rp` + viewModel.omset}"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#2C3333" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/card_background"
+                    android:padding="16dp"
+                    android:layout_marginStart="8dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_order"
+                        android:layout_gravity="start"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/orderLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Jumlah Order"
+                        android:textSize="14sp"
+                        android:textColor="#6C757D"
+                        android:layout_marginBottom="4dp" />
+
+                    <TextView
+                        android:id="@+id/orderValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.jumlahOrder}"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#2C3333" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/transactionContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/card_background"
+                android:padding="16dp">
+
                 <TextView
+                    android:id="@+id/transactionHeader"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="+Rp560.000"
-                    android:textSize="14sp"
+                    android:text="Daftar Transaksi Terbaru"
+                    android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#28A745" />
-            </LinearLayout>
-        </LinearLayout>
+                    android:layout_marginBottom="8dp"
+                    android:textColor="#2C3333" />
 
-    </LinearLayout>
-</ScrollView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_check"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="8dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Payment from #1132"
+                            android:textSize="14sp"
+                            android:textColor="#2C3333" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Hari ini, 24 November 2024 - 20:13"
+                            android:textSize="12sp"
+                            android:textColor="#6C757D" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="+Rp560.000"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#28A745" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Loading Animation -->
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loadingAnimation"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"
+        android:layout_gravity="center"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/loading"
+        android:elevation="10dp" />
+
+    <!-- Dark Overlay -->
+    <View
+        android:id="@+id/darkOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"
+        android:elevation="5dp" />
+
+    </FrameLayout>
+</layout>

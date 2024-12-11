@@ -71,6 +71,8 @@
     <string name="success">Success</string>
     <string name="struk_pembelanjaan_berhasil_ndisimpan_di_aplikasi">Struk pembelanjaan berhasil\ndisimpan di aplikasi</string>
     <string name="kembali_ke_home">Kembali ke home</string>
+    <string name="recent_transactions_title">Daftar Transaksi Terbaru</string>
+    <string name="see_all_transactions">Lihat Semua Transaksi</string>
 
     <!--   Item Product   -->
 </resources>
