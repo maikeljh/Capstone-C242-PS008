@@ -78,6 +78,9 @@ dependencies {
     implementation (libs.converter.gson)
     implementation (libs.okhttp)
 
+    // Lottie
+    implementation(libs.lottie)
+
     // firebase
     implementation(platform(libs.firebase.bom))
     implementation (libs.firebase.auth)

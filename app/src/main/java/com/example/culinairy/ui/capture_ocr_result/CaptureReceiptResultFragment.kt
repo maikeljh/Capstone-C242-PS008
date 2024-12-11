@@ -42,6 +42,9 @@ class CaptureReceiptResultFragment : Fragment() {
         _binding = FragmentCaptureReceiptResultBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        val ocrResult = arguments?.getString("ocr_response")
+        Log.d("CaptureReceiptResultFragment", "Received OCR Result: $ocrResult")
+
         // Dummy data
         val productList = listOf(
             Product("Item A", 2, 5000, 10000),
