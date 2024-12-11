@@ -6,7 +6,4 @@ data class TransactionProduct(
     var price: Int,
     var totalPrice: Int,
 ) {
-    fun copyWithNewQuantity(newQuantity: Int): TransactionProduct {
-        return this.copy(quantity = newQuantity, totalPrice = price * newQuantity)
-    }
 }
