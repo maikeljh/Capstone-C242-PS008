@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "190009097733",
+    "project_id": "capstone-project-442502",
+    "storage_bucket": "capstone-project-442502.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:190009097733:android:2a4ec630a7c343c9dca66c",
+        "android_client_info": {
+          "package_name": "com.example.culinairy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "190009097733-k502rgrcdalj0stnq227a5pmn53r2kf5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.culinairy",
+            "certificate_hash": "5eefb1825fb6b82b2457e45470fd507bbac5dc91"
+          }
+        },
+        {
+          "client_id": "190009097733-684lm2tt69bbk3ba8mt3rtnnbf95gobu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUkP6yiSCeCA2mpI876gRT3bhXCrlvIMU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "190009097733-684lm2tt69bbk3ba8mt3rtnnbf95gobu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
