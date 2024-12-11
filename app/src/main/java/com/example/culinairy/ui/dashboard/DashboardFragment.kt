@@ -11,14 +11,21 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.culinairy.Adapter.LabelAdapter
+import com.example.culinairy.MainActivity
 import com.example.culinairy.R
 import com.example.culinairy.databinding.FragmentDashboardBinding
+import com.example.culinairy.repository.TransactionRepository
+import com.example.culinairy.services.RetrofitInstance
+import com.example.culinairy.services.TransactionService
+import com.example.culinairy.utils.TokenManager
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import java.text.NumberFormat
+import java.util.Locale
 
 class DashboardFragment : Fragment() {
 
@@ -30,14 +37,14 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
-
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        val mainActivity = requireActivity() as MainActivity
 
         // Prepare the dropdown list
         val items = listOf("Hari ini", "Minggu ini", "Bulan ini")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, items)
+        val token = TokenManager.retrieveToken(mainActivity)
         binding.autoCompleteTextView.setAdapter(adapter)
 
         // Optional: Handle dropdown item selection
@@ -48,8 +55,50 @@ class DashboardFragment : Fragment() {
 
         // Setup charts
         setupLineChart(binding.lineChart)
-        setupPieChart(binding.pieChart)
+        setupBarChart(binding.barChart)
 
+        // Initialize DashboardViewModel
+        val dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
+
+        // Observe data
+        dashboardViewModel.transactionsResult.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is TransactionRepository.Result.Loading -> {
+                    android.util.Log.d("DashboardFragment", "Loading transactions...")
+                    binding.omsetValue.text = "Calculating..."
+                    binding.orderValue.text = "Calculating..."
+                }
+                is TransactionRepository.Result.Success -> {
+                    // Access the transactions and meta data
+                    val transactionAllResponse = result.data
+                    val transactions = transactionAllResponse.data.transactions // Access the transactions list
+                    val meta = transactionAllResponse.data.meta
+
+                    // Calculate the sum of total_price
+                    val totalOmset = transactions.sumOf { it.total_price }
+
+                    val formattedOmset = NumberFormat.getCurrencyInstance(Locale("in", "ID")).apply {
+                        maximumFractionDigits = 0
+                    }.format(totalOmset)
+
+                    // Update UI components
+                    binding.omsetValue.text = "$formattedOmset"
+                    binding.orderValue.text = meta.total.toString()
+
+                    android.util.Log.d("DashboardFragment", "Transactions loaded successfully: $transactions")
+                }
+                is TransactionRepository.Result.Error -> {
+                    android.util.Log.e("DashboardFragment", "Error loading transactions: ${result.message}")
+                    binding.omsetValue.text = "Null"
+                    binding.orderValue.text = "Null"
+                }
+            }
+        }
+
+        // Trigger data load
+        if (token != null) {
+            dashboardViewModel.loadTransactions(token)
+        }
         return root
     }
 
@@ -118,45 +167,51 @@ class DashboardFragment : Fragment() {
         lineChart.invalidate()
     }
 
-    private fun setupPieChart(pieChart: PieChart) {
-        // Example Data
+    private fun setupBarChart(barChart: BarChart) {
         val entries = listOf(
-            PieEntry(30f, "Ikan Gurame"),
-            PieEntry(30f, "Ikan Nila"),
-            PieEntry(10f, "Kepiting Besar"),
-            PieEntry(30f, "Cumi Besar")
+            BarEntry(0f, 120f),
+            BarEntry(1f, 95f),
+            BarEntry(2f, 85f),
+            BarEntry(3f, 80f),
+            BarEntry(4f, 75f)
         )
 
-        val pieDataSet = PieDataSet(entries, "")
+        val labels = listOf("Ikan Gurame", "Ikan Nila", "Kepiting Besar", "Cumi Besar", "Ikan Mas")
         val colors = listOf(
-            Color.parseColor("#F5CBA7"), // Ikan Gurame
-            Color.parseColor("#5DADE2"), // Ikan Nila
-            Color.parseColor("#34495E"), // Kepiting Besar
-            Color.parseColor("#A93226")  // Cumi Besar
+            Color.parseColor("#F5CBA7"),
+            Color.parseColor("#5DADE2"),
+            Color.parseColor("#34495E"),
+            Color.parseColor("#A93226"),
+            Color.parseColor("#7DCEA0")
         )
-        pieDataSet.colors = colors
-        pieDataSet.valueTextSize = 0f // Hide percentage labels on the chart
 
-        val pieData = PieData(pieDataSet)
-        pieChart.data = pieData
+        val barDataSet = BarDataSet(entries, "Top 5 Products")
+        barDataSet.colors = colors
+        barDataSet.valueTextSize = 12f
+        barDataSet.valueTextColor = Color.BLACK
 
-        // Customize the chart
-        pieChart.isDrawHoleEnabled = true
-        pieChart.holeRadius = 65f // Thin donut ring
-        pieChart.transparentCircleRadius = 70f
-        pieChart.setDrawEntryLabels(false) // Hide labels on the chart
-        pieChart.description.isEnabled = false
-        pieChart.legend.isEnabled = false
-        pieChart.animateY(1000)
+        val barData = BarData(barDataSet)
+        barData.barWidth = 0.3f // Reduce bar width for better spacing
+        barChart.data = barData
 
-        // Dynamically generate the labels
-        generateLabels(entries, colors)
-    }
+        val xAxis = barChart.xAxis
+        xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.textSize = 10f // Smaller text size
+        xAxis.textColor = Color.parseColor("#6C757D")
+        xAxis.setDrawGridLines(false)
+        xAxis.granularity = 1f
+        xAxis.isGranularityEnabled = true
+        xAxis.labelRotationAngle = 45f // Rotate labels to avoid overlap
 
-    private fun generateLabels(entries: List<PieEntry>, colors: List<Int>) {
-        val adapter = LabelAdapter(entries, colors)
-        binding.labelRecyclerView.adapter = adapter
-        binding.labelRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        barChart.axisLeft.axisMinimum = 0f
+        barChart.axisRight.isEnabled = false
+        barChart.legend.isEnabled = false
+        barChart.description.isEnabled = false
+        barChart.setExtraOffsets(10f, 10f, 10f, 30f) // Add padding to bottom
+        barChart.animateY(1000)
+
+        barChart.invalidate()
     }
 
     override fun onDestroyView() {

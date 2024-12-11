@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -21,6 +22,7 @@ android {
         properties.load(rootProject.file("local.properties").inputStream())
 
         buildConfigField("String", "BASE_URL", "\"${properties.getProperty("BASE_URL")}\"")
+        buildConfigField("String", "DEFAULT_WEB_CLIENT_ID", "\"${properties.getProperty("DEFAULT_WEB_CLIENT_ID")}\"")
     }
 
     buildTypes {
@@ -42,6 +44,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        dataBinding = true
     }
 }
 
@@ -58,6 +61,7 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.fragment.ktx)
+    implementation(libs.firebase.auth.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -73,4 +77,13 @@ dependencies {
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
     implementation (libs.okhttp)
+
+    // Lottie
+    implementation(libs.lottie)
+
+    // firebase
+    implementation(platform(libs.firebase.bom))
+    implementation (libs.firebase.auth)
+    implementation (libs.play.services.auth)
+    implementation (libs.androidx.credentials)
 }

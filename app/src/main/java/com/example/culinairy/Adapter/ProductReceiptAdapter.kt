@@ -1,13 +1,15 @@
 package com.example.culinairy.Adapter
 
-import android.annotation.SuppressLint
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.culinairy.R
@@ -30,66 +32,55 @@ class ProductReceiptAdapter(
         val product = productList[position]
 
         holder.itemText.text = product.name
-        holder.itemTextEdit.setText(product.name)
 
         holder.priceText.text = "Rp${product.price}"
-        holder.priceTextEdit.setText(product.price.toString())
 
         holder.quantityText.text = "${product.quantity}x"
         holder.quantityTextEdit.setText(product.quantity.toString())
 
         holder.totalPriceText.text = "Rp${product.totalPrice}"
-        holder.totalPriceTextEdit.setText(product.totalPrice.toString())
+
+        val categories = arrayOf("Item 1", "Item 2", "Item 3")
+
+        // Set up spinner
+        val adapter = ArrayAdapter(holder.itemView.context, R.layout.spinner_item, categories)
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+        holder.itemEdit.adapter = adapter
+
+        // Set spinner selection based on product name
+        val categoryPosition = categories.indexOf(product.name)
+        holder.itemEdit.setSelection(if (categoryPosition >= 0) categoryPosition else 0)
+
+        holder.itemEdit.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                product.name = categories[position]
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Optional: handle case where no item is selected
+            }
+        }
+
+        holder.quantityTextEdit.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                product.quantity = s.toString().toIntOrNull() ?: 0
+            }
+        })
 
         if (isEditing) {
-            holder.itemTextEdit.visibility = View.VISIBLE
-            holder.priceTextEdit.visibility = View.VISIBLE
+            holder.itemEdit.visibility = View.VISIBLE
             holder.quantityTextEditContainer.visibility = View.VISIBLE
-            holder.totalPriceTextEdit.visibility = View.VISIBLE
 
-            holder.itemText.visibility = View.GONE
-            holder.priceText.visibility = View.GONE
+            holder.itemText.setTextColor(holder.itemView.context.getColor(R.color.white))
             holder.quantityText.visibility = View.GONE
-            holder.totalPriceText.visibility = View.GONE
-
-            holder.itemTextEdit.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(s: Editable?) {
-                    product.name = s.toString()
-                }
-            })
-            holder.priceTextEdit.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(s: Editable?) {
-                    product.price = s.toString().toIntOrNull() ?: 0
-                }
-            })
-            holder.quantityTextEdit.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(s: Editable?) {
-                    product.quantity = s.toString().toIntOrNull() ?: 0
-                }
-            })
-            holder.totalPriceTextEdit.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(s: Editable?) {
-                    product.totalPrice = s.toString().toIntOrNull() ?: 0
-                }
-            })
         } else {
-            holder.itemText.visibility = View.VISIBLE
-            holder.priceText.visibility = View.VISIBLE
+            holder.itemText.setTextColor(holder.itemView.context.getColor(R.color.black))
             holder.quantityText.visibility = View.VISIBLE
-            holder.totalPriceText.visibility = View.VISIBLE
 
-            holder.itemTextEdit.visibility = View.GONE
-            holder.priceTextEdit.visibility = View.GONE
+            holder.itemEdit.visibility = View.GONE
             holder.quantityTextEditContainer.visibility = View.GONE
-            holder.totalPriceTextEdit.visibility = View.GONE
         }
     }
 
@@ -97,14 +88,12 @@ class ProductReceiptAdapter(
 
     inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val itemText: TextView = itemView.findViewById(R.id.itemText)
-        val itemTextEdit: EditText = itemView.findViewById(R.id.itemTextEdit)
+        val itemEdit: Spinner = itemView.findViewById(R.id.itemEdit)
         val priceText: TextView = itemView.findViewById(R.id.priceText)
-        val priceTextEdit: EditText = itemView.findViewById(R.id.priceTextEdit)
         val quantityText: TextView = itemView.findViewById(R.id.quantityText)
         val quantityTextEdit: EditText = itemView.findViewById(R.id.quantityTextEdit)
         val quantityTextEditContainer: LinearLayout = itemView.findViewById(R.id.quantityTextEditContainer)
         val totalPriceText: TextView = itemView.findViewById(R.id.totalPriceText)
-        val totalPriceTextEdit: EditText = itemView.findViewById(R.id.totalPriceTextEdit)
     }
 
     fun toggleEditMode() {
