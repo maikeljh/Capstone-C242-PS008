@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.example.culinairy.Adapter.ProductReceiptAdapter
+import com.example.culinairy.Adapter.ProductAdapter
 import com.example.culinairy.R
-import com.example.culinairy.model.Product
+import com.example.culinairy.model.product.Product
 import com.example.culinairy.databinding.FragmentListProductBinding
 
 class ProductFragment : Fragment() {
@@ -19,7 +19,7 @@ class ProductFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var productAdapter: ProductReceiptAdapter
+    private lateinit var productAdapter: ProductAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,13 +34,13 @@ class ProductFragment : Fragment() {
 
         // Dummy data for the products
         val productList = listOf(
-            Product("Item 1", 1, 10000, 10000),
-            Product("Item 2", 2, 20000, 40000),
-            Product("Item 3", 3, 15000, 45000)
+            Product("1", "Item 1", 10000),
+            Product("2", "Item 2", 20000),
+            Product("3", "Item 3", 15000)
         )
 
         // Initialize and set the adapter
-        productAdapter = ProductReceiptAdapter(productList)
+        productAdapter = ProductAdapter(productList)
         recyclerView.adapter = productAdapter
 
         // Set up the "Add Product" button
