@@ -19,6 +19,7 @@ import com.example.culinairy.MainActivity
 import com.example.culinairy.R
 import com.example.culinairy.databinding.FragmentCaptureReceiptResultBinding
 import com.example.culinairy.model.product.Product
+import com.example.culinairy.model.transaction.CreateTransactionBodyRequest
 import com.example.culinairy.model.transaction.TransactionProduct
 import com.example.culinairy.utils.TokenManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -124,6 +125,33 @@ class CaptureReceiptResultFragment : Fragment() {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
         }
+
+        captureReceiptResultViewModel.createTransactionResponse.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                val isSuccessful = response.status == "success"
+
+                if (isSuccessful) {
+                    // Navigate to success fragment
+                    findNavController().navigate(R.id.action_captureReceiptResultFragment_to_captureReceiptSuccessFragment)
+                } else {
+                    Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        captureReceiptResultViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.darkOverlay1.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.darkOverlay2.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.loadingAnimation.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.editButton.isEnabled = !isLoading
+            binding.confirmButton.isEnabled = !isLoading
+        }
+
+        captureReceiptResultViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     // Set up adapter
@@ -151,6 +179,7 @@ class CaptureReceiptResultFragment : Fragment() {
         itemRegex.findAll(ocrResponse).forEach { matchResult ->
             val product =
                 TransactionProduct(
+                    matchResult.groupValues[5],                    // productId
                     matchResult.groupValues[1],                    // productName
                     matchResult.groupValues[2].toInt(),            // quantity
                     matchResult.groupValues[3].toInt(),            // pricePerUnit
@@ -181,8 +210,24 @@ class CaptureReceiptResultFragment : Fragment() {
             }
         }
         binding.confirmButton.setOnClickListener {
-            // Navigate to success fragment
-            findNavController().navigate(R.id.action_captureReceiptResultFragment_to_captureReceiptSuccessFragment)
+            productList.forEach { product ->
+                Log.d("CurrentItemState", "Product ID: ${product.id}, Product Name: ${product.name}, Quantity: ${product.quantity}, Price: Rp${product.price}, Total Price: Rp${product.totalPrice}")
+            }
+
+            val transactionRequest = CreateTransactionBodyRequest(
+                items = productList.map {
+                    CreateTransactionBodyRequest.Item(
+                        product_id = it.id,
+                        quantity = it.quantity
+                    )
+                }
+            )
+
+            val mainActivity = requireActivity() as MainActivity
+            val token = TokenManager.retrieveToken(mainActivity)
+            if (token != null) {
+                captureReceiptResultViewModel.createTransaction(token, transactionRequest)
+            }
         }
     }
 }

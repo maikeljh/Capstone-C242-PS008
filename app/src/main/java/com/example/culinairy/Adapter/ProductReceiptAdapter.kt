@@ -61,6 +61,8 @@ class ProductReceiptAdapter(
 
                 val selectedProduct = userProductList.find { it.product_name == product.name }
                 if (selectedProduct != null) {
+                    product.id = selectedProduct.product_id
+
                     product.price = selectedProduct.price
                     holder.priceText.text = "Rp${product.price}"
 
