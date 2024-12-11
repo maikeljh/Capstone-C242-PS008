@@ -3,6 +3,8 @@ package com.example.culinairy.repository
 import com.example.culinairy.model.transaction.OCRResponse
 import com.example.culinairy.model.Transactions.Transaction
 import com.example.culinairy.model.Transactions.TransactionAllResponse
+import com.example.culinairy.model.transaction.CreateTransactionBodyRequest
+import com.example.culinairy.model.transaction.CreateTransactionResponse
 import com.example.culinairy.services.RetrofitInstance
 import com.example.culinairy.services.TransactionService
 import okhttp3.MultipartBody
@@ -21,6 +23,10 @@ class TransactionRepository {
 
     suspend fun ocr(token: String, ocrBody: MultipartBody.Part): Response<OCRResponse> {
         return transactionService.ocr(token, ocrBody)
+    }
+
+    suspend fun createTransaction(token: String, transaction: CreateTransactionBodyRequest): Response<CreateTransactionResponse> {
+        return transactionService.createTransaction(token, transaction)
     }
 
     suspend fun fetchTransactionById(id: String): Result<Transaction> {

@@ -150,7 +150,13 @@ class CaptureReceiptFragment : Fragment(), ImageCaptureCallback {
         binding.confirmButton.setOnClickListener {
             val bitmap = (binding.overlay.drawable as? BitmapDrawable)?.bitmap
             if (bitmap != null) {
-                processImage(bitmap)
+//                processImage(bitmap)
+                val args = Bundle()
+                args.putString("ocr_response", ("OCRResponse(status=success, message=Receipt processed successfully, data=OCRData(user_id=CAwOa1q4GiZOyB57Gmyk14Bcx683, timestamp=2024-12-11T16:08:56.615513, items=[OCRItem(product_name=Tamaroe Roll, quantity=7, price_per_unit=35000, total_price=245000, product_id=hI5zT6cqjexrNmxErNPQ), OCRItem(product_name=Salmon Set, quantity=8, price_per_unit=113000, total_price=904000, product_id=SGGoftAb1NVWlFhTuf7l), OCRItem(product_name=Beef Signature, quantity=10, price_per_unit=44000, total_price=440000, product_id=KMgC3Z5AJGk8ZMz1tFjj)], total_price=1589000))").toString())
+                findNavController().navigate(
+                    R.id.action_captureReceiptFragment_to_captureReceiptResultFragment,
+                    args
+                )
             } else {
                 Toast.makeText(requireContext(), "No image to confirm", Toast.LENGTH_SHORT).show()
             }
