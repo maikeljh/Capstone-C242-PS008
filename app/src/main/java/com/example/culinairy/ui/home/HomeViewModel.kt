@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.culinairy.model.Transactions.Transaction
+import com.example.culinairy.model.Transactions.TransactionAllResponse
 import com.example.culinairy.repository.AuthRepository
 import com.example.culinairy.repository.TransactionRepository
 import kotlinx.coroutines.launch
@@ -31,8 +32,8 @@ class HomeViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    private val _transactionsResult = MutableLiveData<TransactionRepository.Result<List<Transaction>>>()
-    val transactionsResult: LiveData<TransactionRepository.Result<List<Transaction>>> get() = _transactionsResult
+    private val _transactionsResult = MutableLiveData<TransactionRepository. Result<TransactionAllResponse>>()
+    val transactionsResult: LiveData<TransactionRepository. Result<TransactionAllResponse>> get() = _transactionsResult
 
     private var activeTasks = 0
         set(value) {
@@ -68,7 +69,7 @@ class HomeViewModel : ViewModel() {
             val result = transactionRepository.fetchAllTransactions(token)
 
             if (result is TransactionRepository.Result.Success) {
-                val transactions = result.data
+                val transactions = result.data.data.transactions
                 val totalOmset = transactions.sumOf { it.total_price }
                 val totalOrders = transactions.size
                 val formattedOmset = NumberFormat.getNumberInstance(Locale.US).format(totalOmset)

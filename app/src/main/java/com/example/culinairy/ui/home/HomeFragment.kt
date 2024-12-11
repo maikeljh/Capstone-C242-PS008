@@ -89,7 +89,7 @@ class HomeFragment : Fragment() {
 
             when (result) {
                 is TransactionRepository.Result.Success -> {
-                    val transactions = result.data
+                    val transactions = result.data.data.transactions
 
                     val latestTransactions = transactions
                         .sortedByDescending { it.timestamp }
