@@ -9,12 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.culinairy.Adapter.ProductAdapter
+import com.example.culinairy.R
 import com.example.culinairy.MainActivity
 import com.example.culinairy.databinding.FragmentListProductBinding
 import com.example.culinairy.model.product.Product
 import com.example.culinairy.repository.ProductRepository
 import com.example.culinairy.services.RetrofitInstance
 import com.example.culinairy.utils.TokenManager
+import androidx.navigation.fragment.findNavController
 
 class ProductFragment : Fragment() {
 
@@ -61,6 +63,10 @@ class ProductFragment : Fragment() {
             productViewModel.fetchProducts(it)
         }
 
+        binding.addProductButton.setOnClickListener {
+            // Navigate to the Create Product Fragment
+            findNavController().navigate(R.id.action_productFragment_to_createProductFragment)
+        }
         return binding.root
     }
 
