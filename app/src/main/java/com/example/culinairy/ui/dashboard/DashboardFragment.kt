@@ -51,32 +51,25 @@ class DashboardFragment : Fragment() {
         setupLineChart(binding.lineChart)
         setupBarChart(binding.barChart)
 
-        // Create the TransactionService (Retrofit instance)
-        val transactionService = RetrofitInstance.transactionService
+        // Initialize DashboardViewModel without factory
+        val dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
 
-        // Create the TransactionRepository
-        val repository = TransactionRepository(transactionService)
-
-        // Use the DashboardViewModelFactory to pass the repository to the ViewModel
-        val factory = DashboardViewModelFactory(repository)
-        val dashboardViewModel = ViewModelProvider(this, factory).get(DashboardViewModel::class.java)
-
-        // Observe data (or just log the data for now)
+        // Observe data
         dashboardViewModel.transactionsResult.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is TransactionRepository.Result.Loading -> {
-                    android.util.Log.d("DashboardFragment", "Loading data...")
+                    android.util.Log.d("DashboardFragment", "Loading transactions...")
                 }
                 is TransactionRepository.Result.Success -> {
-                    android.util.Log.d("DashboardFragment", "Data fetched successfully: ${result.data}")
+                    android.util.Log.d("DashboardFragment", "Transactions loaded successfully: ${result.data}")
                 }
                 is TransactionRepository.Result.Error -> {
-                    android.util.Log.e("DashboardFragment", "Error fetching data: ${result.message}")
+                    android.util.Log.e("DashboardFragment", "Error loading transactions: ${result.message}")
                 }
             }
         }
 
-        // Trigger the data fetch
+        // Trigger data load
         dashboardViewModel.loadTransactions()
         return root
     }

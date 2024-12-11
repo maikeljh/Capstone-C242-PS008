@@ -4,13 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.culinairy.model.Transaction
+import com.example.culinairy.model.Transactions.Transaction
 import com.example.culinairy.repository.TransactionRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class DashboardViewModel(private val repository: TransactionRepository) : ViewModel() {
+class DashboardViewModel : ViewModel() {
+
+    // Initialize TransactionRepository directly
+    private val repository = TransactionRepository()
+
     private val _transactionResult = MutableLiveData<TransactionRepository.Result<Transaction>>()
     val transactionResult: LiveData<TransactionRepository.Result<Transaction>> get() = _transactionResult
 

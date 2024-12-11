@@ -4,15 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.culinairy.MainActivity
 import com.example.culinairy.R
 import com.example.culinairy.databinding.FragmentProfileBinding
-import com.example.culinairy.ui.profile.ProfileViewModel
 import com.example.culinairy.utils.LogoutManager
+import com.example.culinairy.utils.TokenManager
 
 class ProfileFragment : Fragment() {
 
@@ -25,14 +25,33 @@ class ProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val profileViewModel =
-            ViewModelProvider(this).get(ProfileViewModel::class.java)
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+            if (errorMessage != null) {
+                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // fetch user data
+        val mainActivity = requireActivity() as MainActivity
+        val token = TokenManager.retrieveToken(mainActivity)
+        if (token != null) {
+            viewModel.fetchUser(token)
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.loadingAnimation.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.darkOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
+        // logout
         binding.menuLogout.setOnClickListener {
-            val mainActivity = requireActivity() as MainActivity
             LogoutManager.logout(mainActivity)
         }
 

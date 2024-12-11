@@ -29,8 +29,6 @@ class MainActivity : AppCompatActivity() {
         R.id.navigation_home,
         R.id.navigation_capture_receipt_success
     )
-    private val transactionService = RetrofitInstance.transactionService
-    private val transactionRepository = TransactionRepository(transactionService)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

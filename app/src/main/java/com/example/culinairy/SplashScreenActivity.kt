@@ -1,6 +1,8 @@
 package com.example.culinairy
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -26,11 +28,21 @@ class SplashScreenActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             lifecycleScope.launch {
-                val isTokenValid = viewModel.isTokenValid(this@SplashScreenActivity)
-                if (isTokenValid) {
-                    navigateToMain()
-                } else {
-                    navigateToLogin()
+
+                // check SharedPreferences for isNew value
+                val sharedPreferences: SharedPreferences = getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
+                val isNew = sharedPreferences.getBoolean("isNew", false)
+                if (!isNew) {
+                    navigateToIntro()
+                    sharedPreferences.edit().putBoolean("isNew", true).apply()
+                }
+                else {
+                    val isTokenValid = viewModel.isTokenValid(this@SplashScreenActivity)
+                    if (isTokenValid) {
+                        navigateToMain()
+                    } else {
+                        navigateToLogin()
+                    }
                 }
             }
         }, splashDisplay)
@@ -47,4 +59,11 @@ class SplashScreenActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+    private fun navigateToIntro() {
+        // later change to IntroActivity
+        val intent = Intent(this, RegisterActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
 }

@@ -1,22 +1,25 @@
 package com.example.culinairy.services
 
-import android.content.Context
-import android.widget.Toast
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.example.culinairy.BuildConfig
-import com.example.culinairy.model.Transaction
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.util.Objects
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 
+// init retrofit instance
 object RetrofitInstance {
+
+    private val okHttpClient = OkHttpClient.Builder()
+        .connectTimeout(120, TimeUnit.SECONDS)
+        .readTimeout(120, TimeUnit.SECONDS)
+        .writeTimeout(120, TimeUnit.SECONDS)
+        .build()
 
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
             .build()
     }
 

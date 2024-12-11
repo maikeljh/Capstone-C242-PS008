@@ -1,4 +1,4 @@
-package com.example.culinairy.model
+package com.example.culinairy.model.Transactions
 
 data class TransactionResponse(
     val status: String,

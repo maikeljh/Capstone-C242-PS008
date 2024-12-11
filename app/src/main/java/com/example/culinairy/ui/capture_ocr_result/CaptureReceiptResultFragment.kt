@@ -9,8 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,18 +40,71 @@ class CaptureReceiptResultFragment : Fragment() {
         _binding = FragmentCaptureReceiptResultBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        val ocrResult = arguments?.getString("ocr_response")
+        Log.d("CaptureReceiptResultFragment", "Received OCR Result: $ocrResult")
+
         // Dummy data
         val productList = listOf(
-            Product("Item A", 2, 5000, 10000),
-            Product("Item B", 1, 3000, 3000),
-            Product("Item C", 3, 2000, 6000),
-            Product("Item D", 1, 1000, 1000),
-            Product("Item E", 2, 4000, 8000),
-            Product("Item F", 1, 6000, 6000),
-            Product("Item G", 1, 7000, 7000),
-            Product("Item H", 1, 8000, 8000),
-            Product("Item I", 1, 9000, 9000),
-            Product("Item J", 1, 10000, 10000),
+            Product(
+                "Item A",
+                2,
+                5000,
+                10000
+            ),
+            Product(
+                "Item B",
+                1,
+                3000,
+                3000
+            ),
+            Product(
+                "Item C",
+                3,
+                2000,
+                6000
+            ),
+            Product(
+                "Item D",
+                1,
+                1000,
+                1000
+            ),
+            Product(
+                "Item E",
+                2,
+                4000,
+                8000
+            ),
+            Product(
+                "Item F",
+                1,
+                6000,
+                6000
+            ),
+            Product(
+                "Item G",
+                1,
+                7000,
+                7000
+            ),
+            Product(
+                "Item H",
+                1,
+                8000,
+                8000
+            ),
+            Product(
+                "Item I",
+                1,
+                9000,
+                9000
+            ),
+            Product(
+                "Item J",
+                1,
+                10000,
+                10000
+            ),
         )
 
         // Initialize adapter
