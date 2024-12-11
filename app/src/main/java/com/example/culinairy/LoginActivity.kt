@@ -65,6 +65,8 @@ class LoginActivity : AppCompatActivity() {
 
         binding.googleButton.setOnClickListener {
             setButtonsEnabled(false)
+            binding.loadingAnimation.visibility = android.view.View.VISIBLE
+            binding.darkOverlay.visibility = android.view.View.VISIBLE
             googleSignIn()
         }
     }
@@ -84,6 +86,10 @@ class LoginActivity : AppCompatActivity() {
             }
             is LoginViewModel.LoginState.InvalidCredentials -> {
                 Toast.makeText(this, "Invalid credentials.", Toast.LENGTH_SHORT).show()
+            }
+            is LoginViewModel.LoginState.Loading -> {
+                binding.loadingAnimation.visibility = android.view.View.VISIBLE
+                binding.darkOverlay.visibility = android.view.View.VISIBLE
             }
         }
     }
@@ -111,6 +117,9 @@ class LoginActivity : AppCompatActivity() {
     private fun firebaseAuthWithGoogle(account: GoogleSignInAccount?) {
         if (account == null) {
             Toast.makeText(this, "Google Sign-In failed: Account is null.", Toast.LENGTH_SHORT).show()
+            setButtonsEnabled(true)
+            binding.loadingAnimation.visibility = android.view.View.GONE
+            binding.darkOverlay.visibility = android.view.View.GONE
             return
         }
 
@@ -123,6 +132,9 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(this, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
+                setButtonsEnabled(true)
+                binding.loadingAnimation.visibility = android.view.View.GONE
+                binding.darkOverlay.visibility = android.view.View.GONE
             }
     }
 
@@ -142,5 +154,9 @@ class LoginActivity : AppCompatActivity() {
         binding.loginButton.isEnabled = isEnabled
         binding.registerButton.isEnabled = isEnabled
         binding.googleButton.isEnabled = isEnabled
+        if (isEnabled) {
+            binding.loadingAnimation.visibility = android.view.View.GONE
+            binding.darkOverlay.visibility = android.view.View.GONE
+        }
     }
 }

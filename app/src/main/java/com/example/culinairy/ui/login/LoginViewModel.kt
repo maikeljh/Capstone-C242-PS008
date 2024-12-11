@@ -18,6 +18,7 @@ class LoginViewModel : ViewModel() {
         data object Failure : LoginState()
         data object InvalidCredentials : LoginState()
         data class Error(val message: String) : LoginState()
+        data object Loading : LoginState()
     }
 
     fun login(
@@ -27,6 +28,7 @@ class LoginViewModel : ViewModel() {
         onResult: (LoginState) -> Unit
     ) {
         viewModelScope.launch {
+            onResult(LoginState.Loading)
             try {
                 val response = withContext(Dispatchers.IO) {
                     AuthRepository().login(LoginRequestBody(email, password))
