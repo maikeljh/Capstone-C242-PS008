@@ -4,45 +4,120 @@ import Item
 import ListTransactionAdapter
 import TransactionItem
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.culinairy.databinding.ActivityListTransactionBinding
+import com.example.culinairy.repository.TransactionRepository
+import com.example.culinairy.utils.TokenManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.text.NumberFormat
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 class ListTransactionActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityListTransactionBinding
+    private lateinit var adapter: ListTransactionAdapter
+    private val transactionRepository = TransactionRepository()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_list_transaction)
+        binding = ActivityListTransactionBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         supportActionBar?.apply {
             title = "Daftar Semua Transaksi"
             setDisplayHomeAsUpEnabled(true)
         }
 
-        val transactionList = listOf(
-            TransactionItem(
-                title = "Payment from #1132",
-                date = "Hari ini, 24 November 2024 - 20:13",
-                totalPrice = "Rp250.000",
-                items = listOf(
-                    Item(name = "Beras 15kg", price = "Rp150.000", quantity = 1, total = "Rp150.000"),
-                    Item(name = "Telor 1kg", price = "Rp20.000", quantity = 5, total = "Rp100.000")
-                )
-            ),
-            TransactionItem(
-                title = "Payment from #1133",
-                date = "Kemarin, 23 November 2024 - 18:30",
-                totalPrice = "Rp230.000",
-                items = listOf(
-                    Item(name = "Minyak Goreng 2L", price = "Rp50.000", quantity = 2, total = "Rp100.000"),
-                    Item(name = "Gula Pasir 1kg", price = "Rp65.000", quantity = 2, total = "Rp130.000")
-                )
-            )
-        )
+        setupRecyclerView()
 
-        val recyclerView: RecyclerView = findViewById(R.id.transaction_recycler_view)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = ListTransactionAdapter(transactionList)
+        val token = TokenManager.retrieveToken(this)
+        if (token != null) {
+            loadTransactions(token)
+        } else {
+            Toast.makeText(this, "Invalid token. Cannot fetch transactions.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setupRecyclerView() {
+        adapter = ListTransactionAdapter(emptyList())
+        binding.transactionRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.transactionRecyclerView.adapter = adapter
+    }
+
+    private fun loadTransactions(token: String) {
+        setLoading(true)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val result = transactionRepository.fetchAllTransactions(token)
+                withContext(Dispatchers.Main) {
+                    setLoading(false)
+
+                    when (result) {
+                        is TransactionRepository.Result.Success -> {
+                            val transactions = result.data.data.transactions.map { transaction ->
+                                TransactionItem(
+                                    title = "Payment from #${transaction.transaction_id}",
+                                    date = formatTimestamp(transaction.timestamp),
+                                    totalPrice = "Rp${formatNumber(transaction.total_price)}",
+                                    items = transaction.items.map { item ->
+                                        Item(
+                                            name = item.product_name,
+                                            price = "Rp${formatNumber(item.price_per_unit)}",
+                                            quantity = item.quantity,
+                                            total = "Rp${formatNumber(item.total_price)}"
+                                        )
+                                    }
+                                )
+                            }
+                            adapter.updateData(transactions)
+                        }
+                        is TransactionRepository.Result.Error -> {
+                            Toast.makeText(this@ListTransactionActivity, "Error: ${result.message}", Toast.LENGTH_SHORT).show()
+                        }
+                        TransactionRepository.Result.Loading -> {
+                            Toast.makeText(this@ListTransactionActivity, "Loading transactions...", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    setLoading(false) // Hide loading animation if an error occurs
+                    Toast.makeText(this@ListTransactionActivity, "Failed to load transactions: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun formatNumber(value: Int): String {
+        return NumberFormat.getNumberInstance(Locale.US).format(value)
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        binding.loadingAnimation.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.darkOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun formatTimestamp(timestamp: String): String {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+        val outputFormat = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.US)
+        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+        return try {
+            val date = inputFormat.parse(timestamp)
+            outputFormat.format(date!!)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            timestamp
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

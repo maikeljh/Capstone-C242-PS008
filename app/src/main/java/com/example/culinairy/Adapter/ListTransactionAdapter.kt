@@ -22,7 +22,7 @@ data class TransactionItem(
 )
 
 class ListTransactionAdapter(
-    private val transactionList: List<TransactionItem>
+    private var transactionList: List<TransactionItem>
 ) : RecyclerView.Adapter<ListTransactionAdapter.TransactionViewHolder>() {
 
     class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -30,8 +30,8 @@ class ListTransactionAdapter(
         val date: TextView = itemView.findViewById(R.id.transactionDate)
         val totalAllPrice: TextView = itemView.findViewById(R.id.totalAllPrice)
         val totalPrice: TextView = itemView.findViewById(R.id.totalPrice)
-        val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
-        val editButton: Button = itemView.findViewById(R.id.editButton)
+//        val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
+//        val editButton: Button = itemView.findViewById(R.id.editButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
@@ -65,6 +65,10 @@ class ListTransactionAdapter(
         }
     }
 
+    fun updateData(newTransactionList: List<TransactionItem>) {
+        transactionList = newTransactionList
+        notifyDataSetChanged()
+    }
 
     override fun getItemCount(): Int = transactionList.size
 }
