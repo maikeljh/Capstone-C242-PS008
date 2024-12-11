@@ -73,6 +73,7 @@
     <string name="kembali_ke_home">Kembali ke home</string>
     <string name="recent_transactions_title">Daftar Transaksi Terbaru</string>
     <string name="see_all_transactions">Lihat Semua Transaksi</string>
+    <string name="delete">Delete</string>
 
     <!--   Item Product   -->
 </resources>

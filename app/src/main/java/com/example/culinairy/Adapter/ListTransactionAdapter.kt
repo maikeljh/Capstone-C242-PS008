@@ -1,3 +1,4 @@
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -5,6 +6,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.culinairy.ListTransactionActivity
 import com.example.culinairy.R
 
 data class Item(
@@ -15,6 +17,7 @@ data class Item(
 )
 
 data class TransactionItem(
+    val transactionId: String,
     val title: String,
     val date: String,
     val totalPrice: String,
@@ -22,7 +25,9 @@ data class TransactionItem(
 )
 
 class ListTransactionAdapter(
-    private var transactionList: List<TransactionItem>
+    private var transactionList: List<TransactionItem>,
+    private val onDeleteConfirmed: (TransactionItem) -> Unit,
+    private val context: ListTransactionActivity
 ) : RecyclerView.Adapter<ListTransactionAdapter.TransactionViewHolder>() {
 
     class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -30,8 +35,7 @@ class ListTransactionAdapter(
         val date: TextView = itemView.findViewById(R.id.transactionDate)
         val totalAllPrice: TextView = itemView.findViewById(R.id.totalAllPrice)
         val totalPrice: TextView = itemView.findViewById(R.id.totalPrice)
-//        val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
-//        val editButton: Button = itemView.findViewById(R.id.editButton)
+        val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
@@ -63,6 +67,21 @@ class ListTransactionAdapter(
 
             holder.itemView.findViewById<LinearLayout>(R.id.itemsContainer).addView(itemView)
         }
+
+        holder.deleteButton.setOnClickListener {
+            showDeleteConfirmationDialog(transaction)
+        }
+    }
+
+    private fun showDeleteConfirmationDialog(transaction: TransactionItem) {
+        AlertDialog.Builder(context)
+            .setTitle("Confirm Delete")
+            .setMessage("Are you sure you want to delete this transaction?")
+            .setPositiveButton("Yes") { _, _ ->
+                onDeleteConfirmed(transaction)
+            }
+            .setNegativeButton("No", null)
+            .show()
     }
 
     fun updateData(newTransactionList: List<TransactionItem>) {

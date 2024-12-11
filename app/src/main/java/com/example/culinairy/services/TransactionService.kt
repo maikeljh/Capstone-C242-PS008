@@ -8,6 +8,7 @@ import com.example.culinairy.model.transaction.CreateTransactionResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
@@ -32,4 +33,11 @@ interface TransactionService {
     // POST: Create a new transaction
     @POST("/api/v1/transactions")
     suspend fun createTransaction(@Header("Authorization") token: String, @Body transaction: CreateTransactionBodyRequest): Response<CreateTransactionResponse>
+
+    // DELETE: Delete a transaction
+    @DELETE("/api/v1/transactions/{id}")
+    suspend fun deleteTransaction(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): Response<Void>
 }

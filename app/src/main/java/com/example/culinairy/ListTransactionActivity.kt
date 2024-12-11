@@ -36,7 +36,7 @@ class ListTransactionActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        setupRecyclerView()
+        setupRecyclerView(emptyList())
 
         val token = TokenManager.retrieveToken(this)
         if (token != null) {
@@ -46,8 +46,15 @@ class ListTransactionActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupRecyclerView() {
-        adapter = ListTransactionAdapter(emptyList())
+    private fun setupRecyclerView(transactions: List<TransactionItem>) {
+        adapter = ListTransactionAdapter(transactions, { transaction ->
+            val token = TokenManager.retrieveToken(this)
+            if (token != null) {
+                deleteTransaction(token, transaction.transactionId)
+            } else {
+                Toast.makeText(this, "Invalid token. Cannot delete transaction.", Toast.LENGTH_SHORT).show()
+            }
+        }, this)
         binding.transactionRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.transactionRecyclerView.adapter = adapter
     }
@@ -63,21 +70,25 @@ class ListTransactionActivity : AppCompatActivity() {
 
                     when (result) {
                         is TransactionRepository.Result.Success -> {
-                            val transactions = result.data.data.transactions.map { transaction ->
-                                TransactionItem(
-                                    title = "Payment from #${transaction.transaction_id}",
-                                    date = formatTimestamp(transaction.timestamp),
-                                    totalPrice = "Rp${formatNumber(transaction.total_price)}",
-                                    items = transaction.items.map { item ->
-                                        Item(
-                                            name = item.product_name,
-                                            price = "Rp${formatNumber(item.price_per_unit)}",
-                                            quantity = item.quantity,
-                                            total = "Rp${formatNumber(item.total_price)}"
-                                        )
-                                    }
-                                )
-                            }
+                            val transactions = result.data.data.transactions
+                                .sortedByDescending { it.timestamp }
+                                .map { transaction ->
+                                    TransactionItem(
+                                        title = "Payment from #${transaction.transaction_id}",
+                                        date = formatTimestamp(transaction.timestamp),
+                                        totalPrice = "Rp${formatNumber(transaction.total_price)}",
+                                        items = transaction.items.map { item ->
+                                            Item(
+                                                name = item.product_name,
+                                                price = "Rp${formatNumber(item.price_per_unit)}",
+                                                quantity = item.quantity,
+                                                total = "Rp${formatNumber(item.total_price)}"
+                                            )
+                                        },
+                                        transactionId = transaction.transaction_id
+                                    )
+                                }
+
                             adapter.updateData(transactions)
                         }
                         is TransactionRepository.Result.Error -> {
@@ -90,8 +101,40 @@ class ListTransactionActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    setLoading(false) // Hide loading animation if an error occurs
+                    setLoading(false)
                     Toast.makeText(this@ListTransactionActivity, "Failed to load transactions: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun deleteTransaction(token: String, transactionId: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = transactionRepository.deleteTransaction(token, transactionId)
+                withContext(Dispatchers.Main) {
+                    if (response is TransactionRepository.Result.Success) {
+                        Toast.makeText(
+                            this@ListTransactionActivity,
+                            "Transaction deleted successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        loadTransactions(token)
+                    } else if (response is TransactionRepository.Result.Error) {
+                        Toast.makeText(
+                            this@ListTransactionActivity,
+                            "Failed to delete transaction: ${response.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        this@ListTransactionActivity,
+                        "Error: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }

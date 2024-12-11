@@ -64,4 +64,17 @@ class TransactionRepository {
             Result.Error("Exception: ${e.message}")
         }
     }
+
+    suspend fun deleteTransaction(token: String, id: String): Result<Unit> {
+        return try {
+            val response = transactionService.deleteTransaction(token, id)
+            if (response.isSuccessful) {
+                Result.Success(Unit)
+            } else {
+                Result.Error("Failed to delete transaction: ${response.message()}")
+            }
+        } catch (e: Exception) {
+            Result.Error("Error: ${e.message}")
+        }
+    }
 }
