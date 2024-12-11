@@ -170,7 +170,7 @@
                         android:id="@+id/orderValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="375"
+                        android:text=""
                         android:textColor="#2C3333"
                         android:textSize="18sp"
                         android:textStyle="bold" />

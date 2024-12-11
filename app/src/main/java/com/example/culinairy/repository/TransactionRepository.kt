@@ -1,7 +1,10 @@
 package com.example.culinairy.repository
 
+import com.example.culinairy.model.transaction.OCRResponse
 import com.example.culinairy.model.Transactions.Transaction
-import com.example.culinairy.model.TransactionOCR.OCRResponse
+import com.example.culinairy.model.Transactions.TransactionAllResponse
+import com.example.culinairy.model.transaction.CreateTransactionBodyRequest
+import com.example.culinairy.model.transaction.CreateTransactionResponse
 import com.example.culinairy.services.RetrofitInstance
 import com.example.culinairy.services.TransactionService
 import okhttp3.MultipartBody
@@ -22,6 +25,10 @@ class TransactionRepository {
         return transactionService.ocr(token, ocrBody)
     }
 
+    suspend fun createTransaction(token: String, transaction: CreateTransactionBodyRequest): Response<CreateTransactionResponse> {
+        return transactionService.createTransaction(token, transaction)
+    }
+
     suspend fun fetchTransactionById(id: String): Result<Transaction> {
         return try {
             val response = transactionService.getTransactionById(id)
@@ -40,14 +47,13 @@ class TransactionRepository {
         }
     }
 
-    suspend fun fetchAllTransactions(token: String): Result<List<Transaction>> {
+    suspend fun fetchAllTransactions(token: String): Result<TransactionAllResponse> {
         return try {
-            val response = transactionService.getAllTransactions(token)
+            val response = transactionService.getAllTransactions(token) // Pass the token
             if (response.isSuccessful) {
                 val body = response.body()
                 if (body?.status == "success") {
-                    // Access the transactions list
-                    Result.Success(body.data.transactions)
+                    Result.Success(body)
                 } else {
                     Result.Error(body?.message ?: "Unknown error")
                 }
