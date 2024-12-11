@@ -13,6 +13,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.culinairy.R
 import com.example.culinairy.databinding.FragmentDashboardBinding
+import com.example.culinairy.repository.TransactionRepository
+import com.example.culinairy.services.RetrofitInstance
+import com.example.culinairy.services.TransactionService
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
@@ -30,8 +33,6 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
-
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -50,6 +51,33 @@ class DashboardFragment : Fragment() {
         setupLineChart(binding.lineChart)
         setupBarChart(binding.barChart)
 
+        // Create the TransactionService (Retrofit instance)
+        val transactionService = RetrofitInstance.transactionService
+
+        // Create the TransactionRepository
+        val repository = TransactionRepository(transactionService)
+
+        // Use the DashboardViewModelFactory to pass the repository to the ViewModel
+        val factory = DashboardViewModelFactory(repository)
+        val dashboardViewModel = ViewModelProvider(this, factory).get(DashboardViewModel::class.java)
+
+        // Observe data (or just log the data for now)
+        dashboardViewModel.transactionsResult.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is TransactionRepository.Result.Loading -> {
+                    android.util.Log.d("DashboardFragment", "Loading data...")
+                }
+                is TransactionRepository.Result.Success -> {
+                    android.util.Log.d("DashboardFragment", "Data fetched successfully: ${result.data}")
+                }
+                is TransactionRepository.Result.Error -> {
+                    android.util.Log.e("DashboardFragment", "Error fetching data: ${result.message}")
+                }
+            }
+        }
+
+        // Trigger the data fetch
+        dashboardViewModel.loadTransactions()
         return root
     }
 

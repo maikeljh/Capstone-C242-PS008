@@ -3,11 +3,33 @@ package com.example.culinairy.ui.dashboard
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.culinairy.model.Transaction
+import com.example.culinairy.repository.TransactionRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
-class DashboardViewModel : ViewModel() {
+class DashboardViewModel(private val repository: TransactionRepository) : ViewModel() {
+    private val _transactionResult = MutableLiveData<TransactionRepository.Result<Transaction>>()
+    val transactionResult: LiveData<TransactionRepository.Result<Transaction>> get() = _transactionResult
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is dashboard Fragment"
+    private val _transactionsResult = MutableLiveData<TransactionRepository.Result<List<Transaction>>>()
+    val transactionsResult: LiveData<TransactionRepository.Result<List<Transaction>>> get() = _transactionsResult
+
+    fun loadTransactionById(id: String) {
+        viewModelScope.launch {
+            _transactionResult.postValue(TransactionRepository.Result.Loading) // Post Loading state
+            val result = repository.fetchTransactionById(id)
+            _transactionResult.postValue(result) // Post Success or Error state
+        }
     }
-    val text: LiveData<String> = _text
+
+    fun loadTransactions() {
+        viewModelScope.launch {
+            _transactionsResult.postValue(TransactionRepository.Result.Loading) // Post Loading state
+            val result = repository.fetchAllTransactions()
+            _transactionsResult.postValue(result) // Post Success or Error state
+        }
+    }
 }
