@@ -112,9 +112,6 @@ class CaptureReceiptFragment : Fragment(), ImageCaptureCallback {
     private fun setupObservers() {
         captureReceiptViewModel.ocrResponse.observe(viewLifecycleOwner) { response ->
             response?.let {
-                // Log the response
-                Log.d("CaptureReceiptFragment", "OCR Response: $it")
-
                 // Navigate to result fragment
                 val args = Bundle()
                 args.putString("ocr_response", it.toString())

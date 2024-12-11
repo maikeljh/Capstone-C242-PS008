@@ -21,6 +21,8 @@ import com.example.culinairy.databinding.FragmentCaptureReceiptResultBinding
 import com.example.culinairy.model.Product
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.json.JSONArray
+import org.json.JSONObject
 
 class CaptureReceiptResultFragment : Fragment() {
 
@@ -45,19 +47,8 @@ class CaptureReceiptResultFragment : Fragment() {
         val ocrResult = arguments?.getString("ocr_response")
         Log.d("CaptureReceiptResultFragment", "Received OCR Result: $ocrResult")
 
-        // Dummy data
-        val productList = listOf(
-            Product("Item A", 2, 5000, 10000),
-            Product("Item B", 1, 3000, 3000),
-            Product("Item C", 3, 2000, 6000),
-            Product("Item D", 1, 1000, 1000),
-            Product("Item E", 2, 4000, 8000),
-            Product("Item F", 1, 6000, 6000),
-            Product("Item G", 1, 7000, 7000),
-            Product("Item H", 1, 8000, 8000),
-            Product("Item I", 1, 9000, 9000),
-            Product("Item J", 1, 10000, 10000),
-        )
+        // Parse OCR response
+        val productList = parseOcrResponse(ocrResult)
 
         // Initialize adapter
         productReceiptAdapter = ProductReceiptAdapter(productList)
@@ -99,6 +90,31 @@ class CaptureReceiptResultFragment : Fragment() {
         navView.visibility = View.VISIBLE
         val fab: FloatingActionButton = requireActivity().findViewById(com.example.culinairy.R.id.fab)
         fab.visibility = View.VISIBLE
+    }
+
+    // Parse OCR response
+    private fun parseOcrResponse(ocrResponse: String?): List<Product> {
+        if (ocrResponse.isNullOrEmpty()) {
+            Log.e("ParseOCRResponse", "OCR Response is null or empty")
+            return emptyList()
+        }
+
+        // Regex
+        val itemRegex = Regex("""Item\(product_name=(.*?), quantity=(\d+), price_per_unit=(\d+), total_price=(\d+)(?:, product_id=(.*?))?\)""")
+
+        val products = mutableListOf<Product>()
+
+        itemRegex.findAll(ocrResponse).forEach { matchResult ->
+            val product = Product(
+                matchResult.groupValues[1],                    // productName
+                matchResult.groupValues[2].toInt(),            // quantity
+                matchResult.groupValues[3].toInt(),            // pricePerUnit
+                matchResult.groupValues[4].toInt(),            // totalPrice
+            )
+            products.add(product)
+        }
+
+        return products
     }
 
     // Set up button listeners
