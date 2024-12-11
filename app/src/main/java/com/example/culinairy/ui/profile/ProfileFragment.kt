@@ -45,6 +45,11 @@ class ProfileFragment : Fragment() {
             viewModel.fetchUser(token)
         }
 
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.loadingAnimation.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.darkOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
         binding.menuLogout.setOnClickListener {
             LogoutManager.logout(mainActivity)
         }

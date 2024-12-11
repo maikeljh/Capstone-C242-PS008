@@ -32,8 +32,12 @@ class EditProfileFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        // Fetch user data
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.loadingAnimation.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.darkOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
 
+        // Fetch user data
         fetchUserData()
 
         // update user
