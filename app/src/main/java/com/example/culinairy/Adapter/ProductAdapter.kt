@@ -2,46 +2,42 @@ package com.example.culinairy.Adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.culinairy.R
+import com.example.culinairy.databinding.ProductCardBinding
 import com.example.culinairy.model.product.Product
 
 class ProductAdapter(
-    private val productList: List<Product>,
-    private val onEditClick: (Product) -> Unit // Callback for edit button clicks
+    private var productList: List<Product>,
+    private val onEditClick: (Product) -> Unit // Pass a lambda for handling edit clicks
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
+    class ProductViewHolder(val binding: ProductCardBinding) :
+        RecyclerView.ViewHolder(binding.root)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.product_card, parent, false)
-        return ProductViewHolder(view)
+        val binding =
+            ProductCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ProductViewHolder(binding)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
-        holder.bind(product)
+        holder.binding.itemText.text = product.product_name
+        holder.binding.priceText.text = product.price.toString()
 
-        // Set click listener for the edit button
-        holder.editButton.setOnClickListener {
-            onEditClick(product) // Trigger callback with the current product
+        // Set up the edit button click listener
+        holder.binding.editButton.setOnClickListener {
+            onEditClick(product)
         }
     }
 
     override fun getItemCount(): Int = productList.size
 
-    inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val itemText: TextView = itemView.findViewById(R.id.itemText)
-        private val priceText: TextView = itemView.findViewById(R.id.priceText)
-        val editButton: ImageButton = itemView.findViewById(R.id.editButton)
-
-        @SuppressLint("SetTextI18n")
-        fun bind(product: Product) {
-            itemText.text = product.product_name
-            priceText.text = "Rp${product.price}"
-        }
+    fun updateData(newProducts: List<Product>) {
+        productList = newProducts
+        notifyDataSetChanged()
     }
 }
+

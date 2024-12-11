@@ -12,3 +12,4 @@ class ProductRepository {
         return productService.getProducts(token)
     }
 }
+
