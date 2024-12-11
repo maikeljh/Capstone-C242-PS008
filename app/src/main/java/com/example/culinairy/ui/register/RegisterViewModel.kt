@@ -3,7 +3,7 @@ package com.example.culinairy.ui.register
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.culinairy.model.RegisterRequestBody
+import com.example.culinairy.model.auth.RegisterRequestBody
 import com.example.culinairy.repository.AuthRepository
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -13,6 +13,7 @@ class RegisterViewModel : ViewModel() {
     val registrationStatus = MutableLiveData<Boolean>()
     val errorMessage = MutableLiveData<String>()
 
+    // register
     fun register(name: String, email: String, password: String, address: String) {
         viewModelScope.launch {
             try {

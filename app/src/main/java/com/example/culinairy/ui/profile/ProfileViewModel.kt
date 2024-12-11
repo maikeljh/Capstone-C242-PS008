@@ -23,7 +23,12 @@ class ProfileViewModel : ViewModel() {
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
 
+    private val _isLoading = MutableLiveData<Boolean>(false)
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
+    // fetch user
     fun fetchUser(token: String) {
+        _isLoading.value = true
         viewModelScope.launch {
             try {
                 val response = repository.getUser(token)
@@ -40,6 +45,7 @@ class ProfileViewModel : ViewModel() {
             } catch (e: Exception) {
                 _error.value = "Error: ${e.message}"
             } finally {
+                _isLoading.value = false
             }
         }
     }

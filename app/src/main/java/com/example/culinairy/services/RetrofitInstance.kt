@@ -6,6 +6,7 @@ import com.example.culinairy.BuildConfig
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 
+// init retrofit instance
 object RetrofitInstance {
 
     private val okHttpClient = OkHttpClient.Builder()

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.culinairy.model.UpdateUserRequestBody
+import com.example.culinairy.model.auth.UpdateUserRequestBody
 import com.example.culinairy.repository.AuthRepository
 import kotlinx.coroutines.launch
 
@@ -21,7 +21,12 @@ class EditProfileViewModel : ViewModel() {
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
 
+    private val _isLoading = MutableLiveData<Boolean>(false)
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
+    // fetch user
     fun fetchUser(token: String) {
+        _isLoading.value = true
         viewModelScope.launch {
             try {
                 val response = repository.getUser(token)
@@ -37,11 +42,14 @@ class EditProfileViewModel : ViewModel() {
             } catch (e: Exception) {
                 _error.value = "Error: ${e.message}"
             } finally {
+                _isLoading.value = false
             }
         }
     }
 
+    // update profile
     fun updateProfile(token: String, updateUserBody: UpdateUserRequestBody) {
+        _isLoading.value = true
         viewModelScope.launch {
             try {
                 val response = repository.updateUser(token, updateUserBody)
@@ -57,6 +65,7 @@ class EditProfileViewModel : ViewModel() {
             } catch (e: Exception) {
                 _error.value = "Error: ${e.message}"
             } finally {
+                _isLoading.value = false
             }
         }
     }

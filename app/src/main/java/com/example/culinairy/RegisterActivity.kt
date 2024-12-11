@@ -2,7 +2,6 @@ package com.example.culinairy
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +25,7 @@ class RegisterActivity : AppCompatActivity() {
             navigateToLogin()
         }
 
+        // register
         binding.registerButton.setOnClickListener {
             val name = binding.namaEt.text.toString().trim()
             val email = binding.emailEt.text.toString().trim()
@@ -34,8 +34,9 @@ class RegisterActivity : AppCompatActivity() {
 
             if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && address.isNotEmpty()) {
                 if (isValidEmail(email) && isValidPassword(password)) {
-                    viewModel.register(name, email, password, address)
                     toggleButtonState(false)
+                    toggleLoading(true)
+                    viewModel.register(name, email, password, address)
                 } else {
                     Toast.makeText(this, "Please insert a valid email and a minimum 6 chars password", Toast.LENGTH_SHORT).show()
                 }
@@ -44,25 +45,30 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
-        // Observe registration status
         viewModel.registrationStatus.observe(this, Observer { success ->
             if (success) {
                 Toast.makeText(this, "Registration successful.", Toast.LENGTH_SHORT).show()
                 navigateToLogin()
             }
             toggleButtonState(true)
+            toggleLoading(false)
         })
 
-        // Observe errors
         viewModel.errorMessage.observe(this, Observer { message ->
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
             toggleButtonState(true)
+            toggleLoading(false)
         })
     }
 
     private fun toggleButtonState(enabled: Boolean) {
         binding.registerButton.isEnabled = enabled
         binding.textView5.isEnabled = enabled
+    }
+
+    private fun toggleLoading(show: Boolean) {
+        binding.loadingAnimation.visibility = if (show) android.view.View.VISIBLE else android.view.View.GONE
+        binding.darkOverlay.visibility = if (show) android.view.View.VISIBLE else android.view.View.GONE
     }
 
     private fun navigateToLogin() {
