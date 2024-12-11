@@ -1,6 +1,6 @@
 package com.example.culinairy.services
 
-import com.example.culinairy.model.Transaction.OCRResponse
+import com.example.culinairy.model.transaction.OCRResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Header

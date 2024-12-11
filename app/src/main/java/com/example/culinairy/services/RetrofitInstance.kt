@@ -30,4 +30,8 @@ object RetrofitInstance {
     val transactionService: TransactionService by lazy {
         retrofit.create(TransactionService::class.java)
     }
+
+    val productService: ProductService by lazy {
+        retrofit.create(ProductService::class.java)
+    }
 }

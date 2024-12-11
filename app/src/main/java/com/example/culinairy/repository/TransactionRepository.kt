@@ -1,6 +1,6 @@
 package com.example.culinairy.repository
 
-import com.example.culinairy.model.Transaction.OCRResponse
+import com.example.culinairy.model.transaction.OCRResponse
 import com.example.culinairy.services.RetrofitInstance
 import com.example.culinairy.services.TransactionService
 import okhttp3.MultipartBody

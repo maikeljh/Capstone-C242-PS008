@@ -2,6 +2,7 @@ package com.example.culinairy.Adapter
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +14,13 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.culinairy.R
-import com.example.culinairy.model.Product
+import com.example.culinairy.model.product.Product
+import com.example.culinairy.model.transaction.TransactionProduct
 
 class ProductReceiptAdapter(
-    private val productList: List<Product>
+    private val productList: List<TransactionProduct>,
+    private val userProductList: List<Product>,
+    private val totalPriceCallback: (Int) -> Unit
 ) : RecyclerView.Adapter<ProductReceiptAdapter.ProductViewHolder>() {
 
     // Variables
@@ -40,7 +44,7 @@ class ProductReceiptAdapter(
 
         holder.totalPriceText.text = "Rp${product.totalPrice}"
 
-        val categories = arrayOf("Item 1", "Item 2", "Item 3")
+        val categories = userProductList.map { it.product_name }.sorted()
 
         // Set up spinner
         val adapter = ArrayAdapter(holder.itemView.context, R.layout.spinner_item, categories)
@@ -54,10 +58,20 @@ class ProductReceiptAdapter(
         holder.itemEdit.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 product.name = categories[position]
+
+                val selectedProduct = userProductList.find { it.product_name == product.name }
+                if (selectedProduct != null) {
+                    product.price = selectedProduct.price
+                    holder.priceText.text = "Rp${product.price}"
+
+                    product.totalPrice = product.price * product.quantity
+                    holder.totalPriceText.text = "Rp${product.totalPrice}"
+
+                    totalPriceCallback(getTotalPrice())
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Optional: handle case where no item is selected
             }
         }
 
@@ -66,6 +80,11 @@ class ProductReceiptAdapter(
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 product.quantity = s.toString().toIntOrNull() ?: 0
+
+                product.totalPrice = product.price * product.quantity
+                holder.totalPriceText.text = "Rp${product.totalPrice}"
+
+                totalPriceCallback(getTotalPrice())
             }
         })
 
@@ -86,6 +105,10 @@ class ProductReceiptAdapter(
 
     override fun getItemCount(): Int = productList.size
 
+    override fun getItemViewType(position: Int) = position
+
+    override fun getItemId(position: Int) = position.toLong()
+
     inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val itemText: TextView = itemView.findViewById(R.id.itemText)
         val itemEdit: Spinner = itemView.findViewById(R.id.itemEdit)
@@ -99,5 +122,9 @@ class ProductReceiptAdapter(
     fun toggleEditMode() {
         isEditing = !isEditing
         notifyDataSetChanged()
+    }
+
+    private fun getTotalPrice(): Int {
+        return productList.sumOf { it.totalPrice }
     }
 }

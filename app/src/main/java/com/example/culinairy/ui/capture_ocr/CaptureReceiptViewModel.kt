@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.culinairy.model.Transaction.OCRResponse
+import com.example.culinairy.model.transaction.OCRResponse
 import com.example.culinairy.repository.TransactionRepository
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
