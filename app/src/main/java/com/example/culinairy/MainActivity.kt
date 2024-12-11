@@ -3,6 +3,7 @@ package com.example.culinairy
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -12,6 +13,12 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.culinairy.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.culinairy.repository.TransactionRepository
+import com.example.culinairy.ui.dashboard.DashboardViewModel
+import com.example.culinairy.services.RetrofitInstance
+import android.util.Log
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,6 +48,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_profile
             )
         )
+
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         fab = binding.fab

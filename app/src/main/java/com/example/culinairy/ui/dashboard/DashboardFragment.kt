@@ -11,14 +11,21 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.culinairy.MainActivity
 import com.example.culinairy.R
 import com.example.culinairy.databinding.FragmentDashboardBinding
+import com.example.culinairy.repository.TransactionRepository
+import com.example.culinairy.services.RetrofitInstance
+import com.example.culinairy.services.TransactionService
+import com.example.culinairy.utils.TokenManager
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import java.text.NumberFormat
+import java.util.Locale
 
 class DashboardFragment : Fragment() {
 
@@ -30,14 +37,14 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
-
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        val mainActivity = requireActivity() as MainActivity
 
         // Prepare the dropdown list
         val items = listOf("Hari ini", "Minggu ini", "Bulan ini")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, items)
+        val token = TokenManager.retrieveToken(mainActivity)
         binding.autoCompleteTextView.setAdapter(adapter)
 
         // Optional: Handle dropdown item selection
@@ -50,6 +57,48 @@ class DashboardFragment : Fragment() {
         setupLineChart(binding.lineChart)
         setupBarChart(binding.barChart)
 
+        // Initialize DashboardViewModel
+        val dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
+
+        // Observe data
+        dashboardViewModel.transactionsResult.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is TransactionRepository.Result.Loading -> {
+                    android.util.Log.d("DashboardFragment", "Loading transactions...")
+                    binding.omsetValue.text = "Calculating..."
+                    binding.orderValue.text = "Calculating..."
+                }
+                is TransactionRepository.Result.Success -> {
+                    // Access the transactions and meta data
+                    val transactionAllResponse = result.data
+                    val transactions = transactionAllResponse.data.transactions // Access the transactions list
+                    val meta = transactionAllResponse.data.meta
+
+                    // Calculate the sum of total_price
+                    val totalOmset = transactions.sumOf { it.total_price }
+
+                    val formattedOmset = NumberFormat.getCurrencyInstance(Locale("in", "ID")).apply {
+                        maximumFractionDigits = 0
+                    }.format(totalOmset)
+
+                    // Update UI components
+                    binding.omsetValue.text = "$formattedOmset"
+                    binding.orderValue.text = meta.total.toString()
+
+                    android.util.Log.d("DashboardFragment", "Transactions loaded successfully: $transactions")
+                }
+                is TransactionRepository.Result.Error -> {
+                    android.util.Log.e("DashboardFragment", "Error loading transactions: ${result.message}")
+                    binding.omsetValue.text = "Null"
+                    binding.orderValue.text = "Null"
+                }
+            }
+        }
+
+        // Trigger data load
+        if (token != null) {
+            dashboardViewModel.loadTransactions(token)
+        }
         return root
     }
 
