@@ -1,22 +1,20 @@
 package com.example.culinairy
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.example.culinairy.databinding.ActivityLoginBinding
 import com.example.culinairy.ui.login.LoginViewModel
-import com.example.culinairy.utils.TokenManager
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.firebase.FirebaseApp
 
 class LoginActivity : AppCompatActivity() {
 
@@ -24,8 +22,7 @@ class LoginActivity : AppCompatActivity() {
     private val binding get() = _binding!!
     private val viewModel: LoginViewModel by viewModels()
     private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var googleSignInClient: GoogleSignInClient
-    val Req_Code: Int = 123
+    private lateinit var oneTapClient: SignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,25 +30,18 @@ class LoginActivity : AppCompatActivity() {
         _binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        FirebaseApp.initializeApp(this)
-
-        // Configure Google Sign-In
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(BuildConfig.DEFAULT_WEB_CLIENT_ID)
-            .requestEmail()
-            .build()
-
-
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
+        // init firebase
         firebaseAuth = FirebaseAuth.getInstance()
+        oneTapClient = Identity.getSignInClient(this)
 
+        // login
         binding.loginButton.setOnClickListener {
             val email = binding.emailEt.text.toString().trim()
             val password = binding.passEt.text.toString().trim()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 setButtonsEnabled(false)
-                viewModel.login(this@LoginActivity, email, password) { state ->
+                viewModel.login(this@LoginActivity, email = email, password = password) { state ->
                     handleLoginState(state)
                 }
             } else {
@@ -59,16 +49,94 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        // register
         binding.registerButton.setOnClickListener {
             navigateToRegister()
         }
 
+        // login google
         binding.googleButton.setOnClickListener {
             setButtonsEnabled(false)
             binding.loadingAnimation.visibility = android.view.View.VISIBLE
             binding.darkOverlay.visibility = android.view.View.VISIBLE
-            googleSignIn()
+            startGoogleSignIn()
         }
+    }
+
+    private fun startGoogleSignIn() {
+        val signInRequest = BeginSignInRequest.builder()
+            .setGoogleIdTokenRequestOptions(
+                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                    .setSupported(true)
+                    .setServerClientId(BuildConfig.DEFAULT_WEB_CLIENT_ID)
+                    .setFilterByAuthorizedAccounts(false)
+                    .build()
+            )
+            .build()
+
+        oneTapClient.beginSignIn(signInRequest)
+            .addOnSuccessListener { result ->
+                val intent = result.pendingIntent.intentSender
+                googleSignInLauncher.launch(IntentSenderRequest.Builder(intent).build())
+            }
+            .addOnFailureListener { e ->
+                Log.e("GoogleSignIn", "One Tap Sign-In failed: ${e.message}", e)
+                Toast.makeText(this, "Google Sign-In failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                setButtonsEnabled(true)
+                binding.loadingAnimation.visibility = android.view.View.GONE
+                binding.darkOverlay.visibility = android.view.View.GONE
+            }
+    }
+
+    private val googleSignInLauncher = registerForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val credential = oneTapClient.getSignInCredentialFromIntent(result.data)
+            val idToken = credential.googleIdToken
+            if (idToken != null) {
+                firebaseAuthWithGoogle(idToken)
+            } else {
+                Toast.makeText(this, "Google Sign-In failed: ID Token is null.", Toast.LENGTH_SHORT).show()
+                setButtonsEnabled(true)
+                binding.loadingAnimation.visibility = android.view.View.GONE
+                binding.darkOverlay.visibility = android.view.View.GONE
+            }
+        } else {
+            Toast.makeText(this, "Google Sign-In cancelled.", Toast.LENGTH_SHORT).show()
+            setButtonsEnabled(true)
+            binding.loadingAnimation.visibility = android.view.View.GONE
+            binding.darkOverlay.visibility = android.view.View.GONE
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        firebaseAuth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val user = firebaseAuth.currentUser
+                    user?.getIdToken(true)?.addOnCompleteListener { tokenTask ->
+                        if (tokenTask.isSuccessful) {
+                            val firebaseIdToken = tokenTask.result?.token
+
+                            // login google
+                            viewModel.login(this@LoginActivity, googleToken = firebaseIdToken, google = true) { state ->
+                                handleLoginState(state)
+                            }
+                            navigateToMain()
+                        } else {
+                            Log.e("TOKEN", "Error fetching Firebase ID Token", tokenTask.exception)
+                            Toast.makeText(this, "Failed to retrieve Firebase ID Token.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } else {
+                    Toast.makeText(this, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+                setButtonsEnabled(true)
+                binding.loadingAnimation.visibility = android.view.View.GONE
+                binding.darkOverlay.visibility = android.view.View.GONE
+            }
     }
 
     private fun handleLoginState(state: LoginViewModel.LoginState) {
@@ -92,50 +160,6 @@ class LoginActivity : AppCompatActivity() {
                 binding.darkOverlay.visibility = android.view.View.VISIBLE
             }
         }
-    }
-
-    // Google Sign-In handler
-    private val googleSignInLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-        try {
-            val account = task.getResult(ApiException::class.java)
-            firebaseAuthWithGoogle(account)
-        } catch (e: ApiException) {
-            Log.e("GoogleSignIn", "Sign-in failed with status code: ${e.statusCode}", e)
-            Toast.makeText(this, "Google Sign-In failed: ${e.message}", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun googleSignIn() {
-        val signInIntent = googleSignInClient.signInIntent
-        googleSignInLauncher.launch(signInIntent)
-
-    }
-
-    private fun firebaseAuthWithGoogle(account: GoogleSignInAccount?) {
-        if (account == null) {
-            Toast.makeText(this, "Google Sign-In failed: Account is null.", Toast.LENGTH_SHORT).show()
-            setButtonsEnabled(true)
-            binding.loadingAnimation.visibility = android.view.View.GONE
-            binding.darkOverlay.visibility = android.view.View.GONE
-            return
-        }
-
-        val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
-        firebaseAuth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(this, "Google Sign-In successful!", Toast.LENGTH_SHORT).show()
-                    navigateToMain()
-                } else {
-                    Toast.makeText(this, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                }
-                setButtonsEnabled(true)
-                binding.loadingAnimation.visibility = android.view.View.GONE
-                binding.darkOverlay.visibility = android.view.View.GONE
-            }
     }
 
     private fun navigateToMain() {

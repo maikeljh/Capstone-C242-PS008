@@ -2,7 +2,6 @@ package com.example.culinairy
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +25,7 @@ class RegisterActivity : AppCompatActivity() {
             navigateToLogin()
         }
 
+        // register
         binding.registerButton.setOnClickListener {
             val name = binding.namaEt.text.toString().trim()
             val email = binding.emailEt.text.toString().trim()
@@ -45,7 +45,6 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
-        // Observe registration status
         viewModel.registrationStatus.observe(this, Observer { success ->
             if (success) {
                 Toast.makeText(this, "Registration successful.", Toast.LENGTH_SHORT).show()
@@ -55,7 +54,6 @@ class RegisterActivity : AppCompatActivity() {
             toggleLoading(false)
         })
 
-        // Observe errors
         viewModel.errorMessage.observe(this, Observer { message ->
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
             toggleButtonState(true)

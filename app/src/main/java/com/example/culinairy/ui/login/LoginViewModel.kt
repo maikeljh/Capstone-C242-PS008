@@ -3,7 +3,8 @@ package com.example.culinairy.ui.login
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.culinairy.model.LoginRequestBody
+import com.example.culinairy.model.auth.LoginGoogleRequestBody
+import com.example.culinairy.model.auth.LoginRequestBody
 import com.example.culinairy.repository.AuthRepository
 import com.example.culinairy.utils.TokenManager
 import kotlinx.coroutines.Dispatchers
@@ -21,23 +22,31 @@ class LoginViewModel : ViewModel() {
         data object Loading : LoginState()
     }
 
+    // login & google login
     fun login(
         context: Context,
-        email: String,
-        password: String,
+        email: String? = null,
+        password: String? = null,
+        google: Boolean = false,
+        googleToken: String? = null,
         onResult: (LoginState) -> Unit
     ) {
         viewModelScope.launch {
             onResult(LoginState.Loading)
             try {
                 val response = withContext(Dispatchers.IO) {
-                    AuthRepository().login(LoginRequestBody(email, password))
+                    if (google && googleToken != null) {
+                        AuthRepository().loginGoogle(LoginGoogleRequestBody(googleToken))
+                    } else {
+                        AuthRepository().login(LoginRequestBody(email!!, password!!))
+                    }
                 }
 
                 if (response.isSuccessful) {
                     val token = response.body()?.token
                     val exp = response.body()?.exp
 
+                    // save token and exp
                     if (token != null && exp != null) {
                         TokenManager.saveExpToken(context, exp)
                         TokenManager.saveEncryptedToken(context, token)

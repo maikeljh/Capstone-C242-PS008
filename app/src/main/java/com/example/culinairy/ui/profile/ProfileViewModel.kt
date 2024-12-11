@@ -26,6 +26,7 @@ class ProfileViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
 
+    // fetch user
     fun fetchUser(token: String) {
         _isLoading.value = true
         viewModelScope.launch {

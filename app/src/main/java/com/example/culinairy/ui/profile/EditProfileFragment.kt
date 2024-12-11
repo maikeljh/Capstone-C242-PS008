@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.culinairy.MainActivity
 import com.example.culinairy.R
 import com.example.culinairy.databinding.FragmentEditProfileBinding
-import com.example.culinairy.model.UpdateUserRequestBody
+import com.example.culinairy.model.auth.UpdateUserRequestBody
 import com.example.culinairy.utils.TokenManager
 
 class EditProfileFragment : Fragment() {
@@ -37,7 +37,7 @@ class EditProfileFragment : Fragment() {
             binding.darkOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
-        // Fetch user data
+        // fetch user data
         fetchUserData()
 
         // update user

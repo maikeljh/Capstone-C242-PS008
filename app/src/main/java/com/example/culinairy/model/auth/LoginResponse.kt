@@ -1,4 +1,4 @@
-package com.example.culinairy.model
+package com.example.culinairy.model.auth
 
 data class LoginResponse(
     val status: String,

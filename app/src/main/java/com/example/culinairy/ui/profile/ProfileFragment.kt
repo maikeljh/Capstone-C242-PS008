@@ -38,7 +38,7 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        // Fetch user data
+        // fetch user data
         val mainActivity = requireActivity() as MainActivity
         val token = TokenManager.retrieveToken(mainActivity)
         if (token != null) {
@@ -50,6 +50,7 @@ class ProfileFragment : Fragment() {
             binding.darkOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
+        // logout
         binding.menuLogout.setOnClickListener {
             LogoutManager.logout(mainActivity)
         }
