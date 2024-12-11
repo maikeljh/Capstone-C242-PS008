@@ -40,9 +40,9 @@ class TransactionRepository {
         }
     }
 
-    suspend fun fetchAllTransactions(): Result<List<Transaction>> {
+    suspend fun fetchAllTransactions(token: String): Result<List<Transaction>> {
         return try {
-            val response = transactionService.getAllTransactions()
+            val response = transactionService.getAllTransactions(token)
             if (response.isSuccessful) {
                 val body = response.body()
                 if (body?.status == "success") {

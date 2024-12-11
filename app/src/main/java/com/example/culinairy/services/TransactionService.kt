@@ -15,7 +15,7 @@ import retrofit2.http.Part
 interface TransactionService {
     // GET: Get All Transactions
     @GET("/api/v1/transactions")
-    suspend fun getAllTransactions(): Response<TransactionAllResponse>
+    suspend fun getAllTransactions(@Header("Authorization") token: String): Response<TransactionAllResponse>
 
     // GET: Get Transaction by ID
     @GET("/api/v1/transactions/{id}")

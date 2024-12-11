@@ -27,10 +27,10 @@ class DashboardViewModel : ViewModel() {
         }
     }
 
-    fun loadTransactions() {
+    fun loadTransactions(token: String) {
         viewModelScope.launch {
             _transactionsResult.postValue(TransactionRepository.Result.Loading) // Post Loading state
-            val result = repository.fetchAllTransactions()
+            val result = repository.fetchAllTransactions(token)
             _transactionsResult.postValue(result) // Post Success or Error state
         }
     }
