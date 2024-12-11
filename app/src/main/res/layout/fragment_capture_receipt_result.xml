@@ -89,6 +89,27 @@
             android:layout_marginVertical="15dp"
             />
 
+        <View
+            android:id="@+id/darkOverlay1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_dark_overlay"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/loadingAnimation"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:layout_constraintBottom_toBottomOf="@+id/productList"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/productList"
+            app:layout_constraintTop_toTopOf="@+id/productList"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/loading"
+            android:visibility="gone"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
@@ -191,5 +212,13 @@
             android:gravity="center"
             android:layout_gravity="center" />
     </FrameLayout>
+
+    <View
+        android:id="@+id/darkOverlay2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,7 @@
 package com.example.culinairy.repository
 
+import com.example.culinairy.model.transaction.OCRResponse
 import com.example.culinairy.model.Transactions.Transaction
-import com.example.culinairy.model.TransactionOCR.OCRResponse
 import com.example.culinairy.model.Transactions.TransactionAllResponse
 import com.example.culinairy.services.RetrofitInstance
 import com.example.culinairy.services.TransactionService
