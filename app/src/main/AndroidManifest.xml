@@ -12,9 +12,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/culinarai_logo"
+        android:icon="@drawable/logo_culinairy"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/culinarai_logo"
+        android:roundIcon="@drawable/ic_culinairy"
         android:supportsRtl="true"
         android:theme="@style/Theme.CulinAIry"
         tools:targetApi="31">
