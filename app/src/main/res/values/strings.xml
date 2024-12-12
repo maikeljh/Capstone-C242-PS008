@@ -82,6 +82,19 @@
     <string name="jumlah_order">Jumlah Order</string>
     <string name="omset">Omset</string>
     <string name="disclaimer_icon">disclaimer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--   Item Product   -->
+
+    <string name="intro_title_1">Digitalisasi Toko</string>
+    <string name="intro_title_2">Memudahkan analisa toko</string>
+    <string name="intro_title_3">Pencatatan data di cloud</string>
+
+    <string name="intro_desc_1">Permudah manajemen toko Anda dengan sistem digital yang modern dan efisien. Semua transaksi tercatat otomatis tanpa repot.</string>
+    <string name="intro_desc_2">Dapatkan laporan penjualan lengkap dan visualisasi data yang membantu Anda mengambil keputusan bisnis yang lebih baik.</string>
+    <string name="intro_desc_3">Nikmati kemudahan menyimpan data penjualan di cloud dengan aman. Akses kapan saja dan di mana saja.</string>
+
+    <string name="skip">Skip</string>
+    <string name="getStarted">Get Started</string>
 </resources>

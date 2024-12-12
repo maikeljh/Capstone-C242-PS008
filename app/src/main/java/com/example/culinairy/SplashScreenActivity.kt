@@ -60,8 +60,7 @@ class SplashScreenActivity : AppCompatActivity() {
         finish()
     }
     private fun navigateToIntro() {
-        // later change to IntroActivity
-        val intent = Intent(this, RegisterActivity::class.java)
+        val intent = Intent(this, IntroActivity::class.java)
         startActivity(intent)
         finish()
     }
