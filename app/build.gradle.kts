@@ -70,20 +70,24 @@ dependencies {
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
-    
+
     implementation(libs.mpandroidchart)
 
     // Retrofit
-    implementation (libs.retrofit)
-    implementation (libs.converter.gson)
-    implementation (libs.okhttp)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
 
     // Lottie
     implementation(libs.lottie)
 
-    // firebase
+    // Firebase
     implementation(platform(libs.firebase.bom))
-    implementation (libs.firebase.auth)
-    implementation (libs.play.services.auth)
-    implementation (libs.androidx.credentials)
+    implementation(libs.firebase.auth)
+    implementation(libs.play.services.auth)
+    implementation(libs.androidx.credentials)
+
+    // TensorFlow Lite
+    implementation(libs.tensorflow.lite)
+    implementation(libs.tensorflow.lite.gpu)
 }

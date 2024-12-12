@@ -3,6 +3,7 @@ package com.example.culinairy.services
 import com.example.culinairy.model.transaction.OCRResponse
 import com.example.culinairy.model.Transactions.TransactionAllResponse
 import com.example.culinairy.model.Transactions.TransactionTopProductsResponse
+import com.example.culinairy.model.tensorflow.OmsetResponse
 import com.example.culinairy.model.transaction.CreateTransactionBodyRequest
 import com.example.culinairy.model.transaction.CreateTransactionResponse
 import okhttp3.MultipartBody
@@ -24,6 +25,10 @@ interface TransactionService {
     // GET: Get Top 5 Products
     @GET("/api/v1/transactions/dashboard/top-5-products")
     suspend fun getTop5Products(@Header("Authorization") token: String): Response<TransactionTopProductsResponse>
+
+    // GET: Get Omset
+    @GET("api/v1/transactions/predict/omset")
+    suspend fun getOmset(@Header("Authorization") token: String): Response<OmsetResponse>
 
     // POST: OCR
     @Multipart

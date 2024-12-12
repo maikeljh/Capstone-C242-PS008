@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.culinairy.model.Transactions.Transaction
 import com.example.culinairy.model.Transactions.TransactionAllResponse
 import com.example.culinairy.model.Transactions.TransactionTopProductsResponse
+import com.example.culinairy.model.tensorflow.OmsetResponse
 import com.example.culinairy.repository.TransactionRepository
 import kotlinx.coroutines.launch
 
@@ -24,6 +24,9 @@ class DashboardViewModel : ViewModel() {
     val topProductsResult: LiveData<TransactionRepository.Result<TransactionTopProductsResponse>>
         get() = _topProductsResult
 
+    // LiveData for omset
+    private val _omsetResult = MutableLiveData<TransactionRepository.Result<OmsetResponse>>()
+    val omsetResult: LiveData<TransactionRepository.Result<OmsetResponse>> get() = _omsetResult
 
     // Load all transactions
     fun loadTransactions(token: String) {
@@ -39,6 +42,14 @@ class DashboardViewModel : ViewModel() {
             _topProductsResult.postValue(TransactionRepository.Result.Loading)
             val result = repository.fetchTopProducts(token)
             _topProductsResult.postValue(result)
+        }
+    }
+
+    fun loadOmset(id: String) {
+        viewModelScope.launch {
+            _omsetResult.postValue(TransactionRepository.Result.Loading)
+            val result = repository.getOmset(id)
+            _omsetResult.postValue(result)
         }
     }
 

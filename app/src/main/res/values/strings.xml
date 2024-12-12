@@ -81,6 +81,7 @@
     <string name="_5_produk_terlaris">5 Produk Terlaris</string>
     <string name="jumlah_order">Jumlah Order</string>
     <string name="omset">Omset</string>
+    <string name="disclaimer_icon">disclaimer</string>
 
     <!--   Item Product   -->
 </resources>

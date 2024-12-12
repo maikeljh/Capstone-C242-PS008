@@ -1,15 +1,17 @@
 package com.example.culinairy.repository
 
 import com.example.culinairy.model.transaction.OCRResponse
-import com.example.culinairy.model.Transactions.Transaction
 import com.example.culinairy.model.Transactions.TransactionAllResponse
 import com.example.culinairy.model.Transactions.TransactionTopProductsResponse
+import com.example.culinairy.model.tensorflow.OmsetResponse
 import com.example.culinairy.model.transaction.CreateTransactionBodyRequest
 import com.example.culinairy.model.transaction.CreateTransactionResponse
 import com.example.culinairy.services.RetrofitInstance
 import com.example.culinairy.services.TransactionService
 import okhttp3.MultipartBody
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 class TransactionRepository {
 
@@ -76,6 +78,30 @@ class TransactionRepository {
             }
         } catch (e: Exception) {
             Result.Error("Error: ${e.message}")
+        }
+    }
+
+    // Get omset
+    suspend fun getOmset(id: String): Result<OmsetResponse> {
+        return try {
+            val response = transactionService.getOmset(id)
+
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body != null) {
+                    Result.Success(body)
+                } else {
+                    Result.Error("Response body is null")
+                }
+            } else {
+                Result.Error("Error: ${response.code()} - ${response.message()}")
+            }
+        } catch (e: HttpException) {
+            Result.Error("HTTP Exception: ${e.message}")
+        } catch (e: IOException) {
+            Result.Error("Network Error: ${e.message}")
+        } catch (e: Exception) {
+            Result.Error("Unexpected Error: ${e.message}")
         }
     }
 }
