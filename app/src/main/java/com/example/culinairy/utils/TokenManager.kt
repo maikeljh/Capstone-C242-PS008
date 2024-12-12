@@ -147,4 +147,15 @@ object TokenManager {
             return true
         }
     }
+
+    fun getExpToken(context: Context): Long {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+        return sharedPreferences.getLong(EXP_TOKEN, 0L)
+    }
+
+    fun clearTokens(context: Context) {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+        sharedPreferences.edit().remove(JWT_TOKEN_KEY).apply()
+        sharedPreferences.edit().remove(EXP_TOKEN).apply()
+    }
 }

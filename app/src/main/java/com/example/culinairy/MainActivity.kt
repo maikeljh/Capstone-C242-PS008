@@ -1,7 +1,10 @@
 package com.example.culinairy
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.activity.OnBackPressedCallback
@@ -18,6 +21,7 @@ import com.example.culinairy.ui.dashboard.DashboardViewModel
 import com.example.culinairy.services.RetrofitInstance
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
+import com.example.culinairy.utils.TokenManager
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -35,6 +39,8 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        startTokenValidityChecker(this)
 
         val navView: BottomNavigationView = binding.navView
         navController = findNavController(R.id.nav_host_fragment_activity_main)
@@ -104,6 +110,31 @@ class MainActivity : AppCompatActivity() {
     fun updateBottomNavSelection(itemId: Int) {
         val navView: BottomNavigationView = binding.navView
         navView.menu.findItem(itemId).isChecked = true
+    }
+
+    private fun startTokenValidityChecker(context: Context) {
+        val handler = Handler(Looper.getMainLooper())
+        val runnable = object : Runnable {
+            override fun run() {
+                checkTokenValidity(context) {
+                    TokenManager.clearTokens(context)
+                    startActivity(Intent(context, LoginActivity::class.java))
+                    finish()
+                }
+                handler.postDelayed(this, 60 * 1000)
+                Log.d("MainActivity", "Token validity checker is running")
+            }
+        }
+        handler.post(runnable)
+    }
+
+    fun checkTokenValidity(context: Context, onTokenExpired: () -> Unit) {
+        val exp = TokenManager.getExpToken(context)
+        val currentTime = System.currentTimeMillis() / 1000
+
+        if (currentTime >= exp) {
+            onTokenExpired()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
