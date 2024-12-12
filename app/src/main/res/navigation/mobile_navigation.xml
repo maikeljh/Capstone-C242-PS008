@@ -49,9 +49,36 @@
 
     <fragment
         android:id="@+id/navigation_product"
-        android:name="com.example.culinairy.ui.capture_ocr.ProductFragment"
+        android:name="com.example.culinairy.ui.product.ProductFragment"
         android:label="@string/title_product"
+        tools:layout="@layout/fragment_list_product" >
+        <action
+            android:id="@+id/action_productFragment_to_createProductFragment"
+            app:destination="@id/navigation_create_product" />
+        <action
+            android:id="@+id/action_productFragment_to_updateProductFragment"
+            app:destination="@id/navigation_update_product" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_create_product"
+        android:name="com.example.culinairy.ui.product.CreateProductFragment"
+        android:label="Create Product"
         tools:layout="@layout/fragment_create_product" />
+    <fragment
+        android:id="@+id/navigation_update_product"
+        android:name="com.example.culinairy.ui.product.UpdateProductFragment"
+        android:label="Update Product">
+        <argument
+            android:name="productId"
+            app:argType="string" />
+        <argument
+            android:name="productName"
+            app:argType="string" />
+        <argument
+            android:name="productPrice"
+            app:argType="integer" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_profile"

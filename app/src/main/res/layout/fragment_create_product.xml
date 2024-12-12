@@ -107,120 +107,9 @@ android:layout_height="match_parent">
             <!--  EndOf Judul Text Field   -->
         </com.google.android.material.card.MaterialCardView>
         <!--  EndOf Judul layout  -->
-
-        <!--  Nominal Label  -->
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="30dp"
-            android:fontFamily="@font/poppins"
-            android:text="@string/satuan"
-            android:textColor="@color/gray6"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardView1"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            />
-        <!-- Nominal Layout   -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            app:cardCornerRadius="8dp"
-            app:strokeWidth="1dp"
-            app:strokeColor="@color/border"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView2">
-
-            <!--   Nominal Text Field     -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:hintEnabled="false">
-                <!--  Nominal Text Input-->
-<!--                Placeholder yang ini harus jadi dropdown nanti -->
-                <AutoCompleteTextView
-                    android:id="@+id/satuanEt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingVertical="15dp"
-                    android:background="@color/placeholder_box"
-                    android:textColorHint="@color/placeholder_text"
-                    android:hint="@string/input_placeholder_satuan"
-                    android:textSize="16sp"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="0dp"
-                    android:fontFamily="@font/poppins" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-            <!--   EndOf Nominal Text Field     -->
-
-        </com.google.android.material.card.MaterialCardView>
-        <!-- EndOf Nominal Layout   -->
-
-        <!--  Kategori Label  -->
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="30dp"
-            android:fontFamily="@font/poppins"
-            android:text="@string/jumlah"
-            android:textColor="@color/gray6"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardView2"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            />
-        <!-- Kategori Layout   -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            app:cardCornerRadius="8dp"
-            app:strokeWidth="1dp"
-            app:strokeColor="@color/border"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView3">
-
-            <!--   Kategori Text Field     -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:hintEnabled="false">
-                <!--  Kategori Text Input-->
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/jumlahEt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingVertical="15dp"
-                    android:background="@color/placeholder_box"
-                    android:textColorHint="@color/placeholder_text"
-                    android:hint="@string/input_placeholder_jumlah"
-                    android:inputType="text"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="0dp"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/poppins" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-            <!--   EndOf Kategori Text Field     -->
-
-        </com.google.android.material.card.MaterialCardView>
         <!-- EndOf Kategori Layout   -->
 
-        <!--  Lokasi Label  -->
+        <!--  Harga Label  -->
         <TextView
             android:id="@+id/textView4"
             android:layout_width="match_parent"
@@ -232,11 +121,11 @@ android:layout_height="match_parent">
             android:textColor="@color/gray6"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardView3"
+            app:layout_constraintTop_toBottomOf="@id/cardView1"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             />
-        <!-- Lokasi Layout   -->
+        <!-- Harga Layout   -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView4"
             android:layout_width="match_parent"
@@ -250,13 +139,7 @@ android:layout_height="match_parent">
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textView4">
 
-            <!--   Fragment for Lokasi-->
-<!--            <androidx.fragment.app.FragmentContainerView-->
-<!--                android:id="@+id/autocomplete_fragment"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment" />-->
-            <!--  EndOf Fragment  -->
+
             <!--   Harga Satuan Text Field     -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -264,7 +147,7 @@ android:layout_height="match_parent">
                 app:hintEnabled="false">
                 <!-- Harga Satuan Layout -->
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/hargaSatuanEt"
+                    android:id="@+id/hargaEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingVertical="15dp"
