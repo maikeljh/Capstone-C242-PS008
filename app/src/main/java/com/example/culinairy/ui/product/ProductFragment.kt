@@ -106,7 +106,7 @@ class ProductFragment : Fragment() {
         val bundle = Bundle().apply {
             putString("productId", product.product_id)
             putString("productName", product.product_name)
-            putFloat("productPrice", product.price.toFloat())
+            putInt("productPrice", product.price)
         }
         findNavController().navigate(R.id.navigation_update_product, bundle)
     }
