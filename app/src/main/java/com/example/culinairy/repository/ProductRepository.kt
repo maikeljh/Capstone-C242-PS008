@@ -24,5 +24,10 @@ class ProductRepository {
     suspend fun updateProduct(token: String, productId: String, productRequest: ProductRequest): Response<GetProductResponse> {
         return productService.updateProduct(token, productId, productRequest)
     }
+
+    // Delete a product
+    suspend fun deleteProduct(token: String, productId: String): Response<Void> {
+        return productService.deleteProduct(token, productId)
+    }
 }
 

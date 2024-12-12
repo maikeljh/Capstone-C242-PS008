@@ -19,6 +19,10 @@ class ProductViewModel(private val productRepository: ProductRepository) : ViewM
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> get() = _error
 
+    // LiveData for observing delete status
+    private val _deleteStatus = MutableLiveData<Boolean>()
+    val deleteStatus: LiveData<Boolean> get() = _deleteStatus
+
     // Fetch products with the authorization token
     fun fetchProducts(token: String) {
         viewModelScope.launch {
@@ -38,6 +42,25 @@ class ProductViewModel(private val productRepository: ProductRepository) : ViewM
                 // Handle network or other exceptions
                 _error.value = "Exception: ${exception.localizedMessage}"
                 Log.e("ProductViewModel", "Exception: ${exception.localizedMessage}")
+            }
+        }
+    }
+
+    // Delete a product
+    fun deleteProduct(token: String, productId: String) {
+        viewModelScope.launch {
+            try {
+                val response = productRepository.deleteProduct(token, productId)
+                if (response.isSuccessful) {
+                    _deleteStatus.value = true // Notify success
+                    fetchProducts(token) // Refresh product list after deletion
+                } else {
+                    _deleteStatus.value = false // Notify failure
+                    _error.value = "Failed to delete product: ${response.message()}"
+                }
+            } catch (e: Exception) {
+                _deleteStatus.value = false // Notify failure
+                _error.value = "An error occurred: ${e.message}"
             }
         }
     }

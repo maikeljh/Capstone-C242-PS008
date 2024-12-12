@@ -20,4 +20,11 @@ interface ProductService {
         @Path("id") id: String,
         @Body productRequest: ProductRequest
     ): Response<GetProductResponse>
+
+    // DELETE: Delete a transaction
+    @DELETE("/api/v1/products/{id}")
+    suspend fun deleteProduct(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): Response<Void>
 }

@@ -13,7 +13,8 @@ import com.example.culinairy.model.product.Product
 
 class ProductAdapter(
     private var productList: List<Product>,
-    private val onEditClick: (Product) -> Unit // Lambda for edit button clicks
+    private val onEditClick: (Product) -> Unit,
+    private val onDeleteClick: (Product) -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     private var filteredList: List<Product> = productList
@@ -39,15 +40,14 @@ class ProductAdapter(
 //        holder.binding.editButton.setOnClickListener {
 //            onEditClick(product)
 //        }
+        // Edit button functionality
         holder.binding.editButton.setOnClickListener {
-            val bundle = Bundle().apply {
-                // Manually pass arguments using the bundle
-                putString("productId", product.product_id)
-                putString("productName", product.product_name)
-                putInt("productPrice", product.price)
-            }
-            // Navigate to UpdateProductFragment using the bundle
-            it.findNavController().navigate(R.id.navigation_update_product, bundle)
+            onEditClick(product)
+        }
+
+        // Delete button functionality
+        holder.binding.deleteButton.setOnClickListener {
+            onDeleteClick(product)
         }
     }
 

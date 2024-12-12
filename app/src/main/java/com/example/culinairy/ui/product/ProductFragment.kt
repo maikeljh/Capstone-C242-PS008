@@ -1,5 +1,6 @@
 package com.example.culinairy.ui.product
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,9 +32,11 @@ class ProductFragment : Fragment() {
         _binding = FragmentListProductBinding.inflate(inflater, container, false)
 
         // Initialize RecyclerView
-        productAdapter = ProductAdapter(emptyList()) { product ->
-            showEditProductDialog(product)
-        }
+        productAdapter = ProductAdapter(
+            emptyList(),
+            onEditClick = { product -> showEditProductDialog(product) },
+            onDeleteClick = { product -> showDeleteConfirmationDialog(product) }
+        )
 
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = productAdapter
@@ -54,6 +57,17 @@ class ProductFragment : Fragment() {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
         }
+
+        productViewModel.deleteStatus.observe(viewLifecycleOwner) { success ->
+            success?.let {
+                if (it) {
+                    Toast.makeText(requireContext(), "Product deleted successfully", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "Failed to delete product", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
 
         // Fetch products
         token?.let {
@@ -96,6 +110,23 @@ class ProductFragment : Fragment() {
         }
         findNavController().navigate(R.id.navigation_update_product, bundle)
     }
+
+    private fun showDeleteConfirmationDialog(product: Product) {
+        val mainActivity = requireActivity() as MainActivity
+        val token = TokenManager.retrieveToken(mainActivity)
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Delete Product")
+            .setMessage("Are you sure you want to delete ${product.product_name}?")
+            .setPositiveButton("Delete") { _, _ ->
+                token?.let {
+                    productViewModel.deleteProduct(it, product.product_id)
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
 
 
     override fun onDestroyView() {
