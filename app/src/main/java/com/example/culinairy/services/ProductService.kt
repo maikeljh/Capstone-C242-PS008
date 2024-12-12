@@ -14,4 +14,10 @@ interface ProductService {
     @POST("api/v1/products")
     suspend fun createProduct(@Header("Authorization") token: String, @Body productRequest: ProductRequest): Response<GetProductResponse>
 
+    @PUT("/api/v1/products/{id}")
+    suspend fun updateProduct(
+        @Header("Authorization") token: String,
+        @Path("id") id: String,
+        @Body productRequest: ProductRequest
+    ): Response<GetProductResponse>
 }

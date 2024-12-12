@@ -8,24 +8,20 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.culinairy.Adapter.ProductAdapter
-import com.example.culinairy.R
 import com.example.culinairy.MainActivity
+import com.example.culinairy.R
 import com.example.culinairy.databinding.FragmentListProductBinding
 import com.example.culinairy.model.product.Product
-import com.example.culinairy.repository.ProductRepository
-import com.example.culinairy.services.RetrofitInstance
 import com.example.culinairy.utils.TokenManager
-import androidx.navigation.fragment.findNavController
 
 class ProductFragment : Fragment() {
 
     private var _binding: FragmentListProductBinding? = null
     private val binding get() = _binding!!
     private lateinit var productAdapter: ProductAdapter
-
-    // Use the factory to create the ViewModel
     private val productViewModel: ProductViewModel by viewModels { ProductViewModelFactory() }
 
     override fun onCreateView(
@@ -63,38 +59,51 @@ class ProductFragment : Fragment() {
         token?.let {
             productViewModel.fetchProducts(it)
         }
-        // Get reference to the SearchView
-        val searchView = binding.searchView
 
-        // Set up a listener for query text changes
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
+        // Set up search
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean = false
             override fun onQueryTextChange(newText: String?): Boolean {
-                // Filter the list based on the search query
                 productAdapter.filter(newText ?: "")
                 return true
             }
         })
 
+        // Navigate to CreateProductFragment
         binding.addProductButton.setOnClickListener {
-            // Navigate to the Create Product Fragment
             findNavController().navigate(R.id.action_productFragment_to_createProductFragment)
         }
+
         return binding.root
     }
 
-    private fun showEditProductDialog(product: Product) {
-        Toast.makeText(requireContext(), "Edit ${product.product_name}", Toast.LENGTH_SHORT).show()
+    override fun onResume() {
+        super.onResume()
+        // Fetch products
+        // Fetch token
+        val mainActivity = requireActivity() as MainActivity
+        val token = TokenManager.retrieveToken(mainActivity)
+        token?.let {
+            productViewModel.fetchProducts(it)
+        }
     }
+
+    private fun showEditProductDialog(product: Product) {
+        val bundle = Bundle().apply {
+            putString("productId", product.product_id)
+            putString("productName", product.product_name)
+            putFloat("productPrice", product.price.toFloat())
+        }
+        findNavController().navigate(R.id.navigation_update_product, bundle)
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
+
 
 
 
