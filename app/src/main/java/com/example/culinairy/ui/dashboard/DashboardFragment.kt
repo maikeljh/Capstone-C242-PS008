@@ -6,21 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.culinairy.MainActivity
-import com.example.culinairy.R
 import com.example.culinairy.databinding.FragmentDashboardBinding
 import com.example.culinairy.repository.TransactionRepository
-import com.example.culinairy.services.RetrofitInstance
-import com.example.culinairy.services.TransactionService
 import com.example.culinairy.utils.TokenManager
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
@@ -41,13 +34,10 @@ class DashboardFragment : Fragment() {
         val root: View = binding.root
         val mainActivity = requireActivity() as MainActivity
 
-        // Prepare the dropdown list
         val items = listOf("Hari ini", "Minggu ini", "Bulan ini")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, items)
         val token = TokenManager.retrieveToken(mainActivity)
         binding.autoCompleteTextView.setAdapter(adapter)
-
-        // Optional: Handle dropdown item selection
         binding.autoCompleteTextView.setOnItemClickListener { parent, view, position, id ->
             val selectedItem = items[position]
             // Use the selectedItem as needed
