@@ -6,12 +6,15 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import com.example.culinairy.MainActivity
 import com.example.culinairy.R
 import com.example.culinairy.model.product.ProductRequest
 import com.example.culinairy.databinding.FragmentCreateProductBinding
 import com.example.culinairy.repository.ProductOnlyRepository
 import com.example.culinairy.services.ProductService
 import com.example.culinairy.services.RetrofitInstance
+import com.example.culinairy.utils.TokenManager
 
 class CreateProductFragment : Fragment(R.layout.fragment_create_product) {
 
@@ -24,23 +27,36 @@ class CreateProductFragment : Fragment(R.layout.fragment_create_product) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCreateProductBinding.bind(view)
+        // Fetch token
+        val mainActivity = requireActivity() as MainActivity
+        val token = TokenManager.retrieveToken(mainActivity)
 
-        createProductViewModel.createProductResponse.observe(viewLifecycleOwner, Observer { response ->
-            response?.let {
-                if (it.status == "success") {
-                    // Product created successfully, show a success message
-                    Toast.makeText(requireContext(), "Product created successfully!", Toast.LENGTH_SHORT).show()
+        createProductViewModel.createProductResponse.observe(
+            viewLifecycleOwner,
+            Observer { response ->
+                response?.let {
+                    if (it.status == "success") {
+                        // Product created successfully, show a success message
+                        Toast.makeText(
+                            requireContext(),
+                            "Product created successfully!",
+                            Toast.LENGTH_SHORT
+                        ).show()
 
-                    // Clear the input fields
-                    binding.namaEt.text?.clear()
-                    binding.hargaEt.text?.clear()
+                        // Clear the input fields
+                        binding.namaEt.text?.clear()
+                        binding.hargaEt.text?.clear()
 
-                } else {
-                    // Handle failure case
-                    Toast.makeText(requireContext(), "Failed to create product: ${it.message}", Toast.LENGTH_SHORT).show()
+                    } else {
+                        // Handle failure case
+                        Toast.makeText(
+                            requireContext(),
+                            "Failed to create product: ${it.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-            }
-        })
+            })
 
         createProductViewModel.error.observe(viewLifecycleOwner, Observer { errorMessage ->
             errorMessage?.let {
@@ -50,23 +66,29 @@ class CreateProductFragment : Fragment(R.layout.fragment_create_product) {
 
         // Set up form submission
         binding.submitButton.setOnClickListener {
-            val userId = "someUserId" // TODO
+//            val userId = "someUserId" // TODO
             val productName = binding.namaEt.text.toString()
             val price = binding.hargaEt.text.toString().toIntOrNull()
 
             if (productName.isNotEmpty() && price != null) {
                 val productRequest = ProductRequest(
-                    user_id = userId,
+//                    user_id = userId,
                     product_name = productName,
                     price = price
                 )
-                createProductViewModel.createProduct(productRequest)
+                createProductViewModel.createProduct(token!!, productRequest)
+                findNavController().navigate(R.id.navigation_product)
             } else {
                 if (productName.isEmpty()) {
-                    Toast.makeText(requireContext(), "Product name is required", Toast.LENGTH_SHORT).show()
-
+                    Toast.makeText(requireContext(), "Product name is required", Toast.LENGTH_SHORT)
+                        .show()
+                }
                 if (price == null) {
-                    Toast.makeText(requireContext(), "Valid price is required", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Valid price is required",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }

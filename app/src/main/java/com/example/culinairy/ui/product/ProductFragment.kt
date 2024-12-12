@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -62,6 +63,21 @@ class ProductFragment : Fragment() {
         token?.let {
             productViewModel.fetchProducts(it)
         }
+        // Get reference to the SearchView
+        val searchView = binding.searchView
+
+        // Set up a listener for query text changes
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Filter the list based on the search query
+                productAdapter.filter(newText ?: "")
+                return true
+            }
+        })
 
         binding.addProductButton.setOnClickListener {
             // Navigate to the Create Product Fragment
