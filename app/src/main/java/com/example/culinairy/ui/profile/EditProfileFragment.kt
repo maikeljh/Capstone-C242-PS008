@@ -57,10 +57,6 @@ class EditProfileFragment : Fragment() {
 
         return root
     }
-    override fun onResume() {
-        super.onResume()
-        fetchUserData()
-    }
 
     private fun fetchUserData() {
         val mainActivity = requireActivity() as MainActivity

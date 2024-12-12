@@ -3,6 +3,7 @@ package com.example.culinairy.repository
 import com.example.culinairy.model.transaction.OCRResponse
 import com.example.culinairy.model.Transactions.Transaction
 import com.example.culinairy.model.Transactions.TransactionAllResponse
+import com.example.culinairy.model.Transactions.TransactionTopProductsResponse
 import com.example.culinairy.model.transaction.CreateTransactionBodyRequest
 import com.example.culinairy.model.transaction.CreateTransactionResponse
 import com.example.culinairy.services.RetrofitInstance
@@ -29,13 +30,13 @@ class TransactionRepository {
         return transactionService.createTransaction(token, transaction)
     }
 
-    suspend fun fetchTransactionById(id: String): Result<Transaction> {
+    suspend fun fetchTopProducts(token: String): Result<TransactionTopProductsResponse> {
         return try {
-            val response = transactionService.getTransactionById(id)
+            val response = transactionService.getTop5Products(token)
             if (response.isSuccessful) {
                 val body = response.body()
                 if (body?.status == "success") {
-                    Result.Success(body.data)
+                    Result.Success(body)
                 } else {
                     Result.Error(body?.message ?: "Unknown error")
                 }

@@ -62,6 +62,15 @@ class ProfileFragment : Fragment() {
         return root
     }
 
+    override fun onResume() {
+        super.onResume()
+        val mainActivity = requireActivity() as MainActivity
+        val token = TokenManager.retrieveToken(mainActivity)
+        if (token != null) {
+            viewModel.fetchUser(token)
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

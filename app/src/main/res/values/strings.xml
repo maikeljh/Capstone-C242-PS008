@@ -77,6 +77,10 @@
     <string name="recent_transactions_title">Daftar Transaksi Terbaru</string>
     <string name="see_all_transactions">Lihat Semua Transaksi</string>
     <string name="delete">Delete</string>
+    <string name="omset_penjualan">Omset Penjualan</string>
+    <string name="_5_produk_terlaris">5 Produk Terlaris</string>
+    <string name="jumlah_order">Jumlah Order</string>
+    <string name="omset">Omset</string>
 
     <!--   Item Product   -->
 </resources>
