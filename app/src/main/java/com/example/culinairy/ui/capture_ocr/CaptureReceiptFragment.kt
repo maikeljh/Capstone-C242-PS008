@@ -90,6 +90,11 @@ class CaptureReceiptFragment : Fragment(), ImageCaptureCallback {
     override fun onResume() {
         super.onResume()
 
+        // Check camera permission
+        if (allPermissionGranted(context)) {
+            cameraManager.startCamera()
+        }
+
         // Remove navbar
         val navView: BottomNavigationView = requireActivity().findViewById(R.id.nav_view)
         navView.visibility = View.GONE
@@ -167,8 +172,16 @@ class CaptureReceiptFragment : Fragment(), ImageCaptureCallback {
 
     // Process the image with OCR
     private fun processImage(bitmap: Bitmap) {
+        val maxFileSize = 5 * 1024 * 1024
         val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        var quality = 100
+
+        do {
+            byteArrayOutputStream.reset()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
+            quality -= 5
+        } while (byteArrayOutputStream.size() > maxFileSize && quality > 0)
+
         val imageData = byteArrayOutputStream.toByteArray()
         val requestFile = imageData.toRequestBody("image/jpeg".toMediaTypeOrNull())
         val body = MultipartBody.Part.createFormData("image", "image.jpg", requestFile)
