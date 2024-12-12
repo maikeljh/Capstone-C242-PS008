@@ -2,7 +2,7 @@ package com.example.culinairy.services
 
 import com.example.culinairy.model.transaction.OCRResponse
 import com.example.culinairy.model.Transactions.TransactionAllResponse
-import com.example.culinairy.model.Transactions.TransactionResponse
+import com.example.culinairy.model.Transactions.TransactionTopProductsResponse
 import com.example.culinairy.model.transaction.CreateTransactionBodyRequest
 import com.example.culinairy.model.transaction.CreateTransactionResponse
 import okhttp3.MultipartBody
@@ -21,9 +21,9 @@ interface TransactionService {
     @GET("/api/v1/transactions")
     suspend fun getAllTransactions(@Header("Authorization") token: String): Response<TransactionAllResponse>
 
-    // GET: Get Transaction by ID
-    @GET("/api/v1/transactions/{id}")
-    suspend fun getTransactionById(@Path("id") id: String): Response<TransactionResponse>
+    // GET: Get Top 5 Products
+    @GET("/api/v1/transactions/dashboard/top-5-products")
+    suspend fun getTop5Products(@Header("Authorization") token: String): Response<TransactionTopProductsResponse>
 
     // POST: OCR
     @Multipart
