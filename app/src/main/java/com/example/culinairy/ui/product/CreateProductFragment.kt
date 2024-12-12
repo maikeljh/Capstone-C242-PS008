@@ -11,7 +11,8 @@ import com.example.culinairy.MainActivity
 import com.example.culinairy.R
 import com.example.culinairy.model.product.ProductRequest
 import com.example.culinairy.databinding.FragmentCreateProductBinding
-import com.example.culinairy.repository.ProductOnlyRepository
+
+import com.example.culinairy.repository.ProductRepository
 import com.example.culinairy.services.ProductService
 import com.example.culinairy.services.RetrofitInstance
 import com.example.culinairy.utils.TokenManager
@@ -19,7 +20,7 @@ import com.example.culinairy.utils.TokenManager
 class CreateProductFragment : Fragment(R.layout.fragment_create_product) {
 
     private val createProductViewModel: CreateProductViewModel by viewModels {
-        CreateProductViewModelFactory(ProductOnlyRepository(RetrofitInstance.productService)) // Pass productService from RetrofitInstance
+        CreateProductViewModelFactory(ProductRepository()) // Pass productService from RetrofitInstance
     }
 
     private lateinit var binding: FragmentCreateProductBinding

@@ -7,12 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.culinairy.model.product.GetProductResponse
 import com.example.culinairy.model.product.ProductRequest
-import com.example.culinairy.model.product.GetProductsResponse
-import com.example.culinairy.repository.ProductOnlyRepository
+import com.example.culinairy.repository.ProductRepository
 import kotlinx.coroutines.launch
 
 class CreateProductViewModel(
-    private val productOnlyRepository: ProductOnlyRepository
+    private val productRepository: ProductRepository
 ) : ViewModel() {
 
     private val _createProductResponse = MutableLiveData<GetProductResponse?>()
@@ -26,7 +25,7 @@ class CreateProductViewModel(
         viewModelScope.launch {
             try {
                 // Correctly call the instance method from the injected repository
-                val response = productOnlyRepository.createProduct(token, productRequest)
+                val response = productRepository.createProduct(token, productRequest)
 
                 // Check if the response is successful
                 if (response.isSuccessful) {

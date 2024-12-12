@@ -6,11 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.culinairy.model.product.GetProductsResponse
-import com.example.culinairy.repository.ProductOnlyRepository
 import com.example.culinairy.repository.ProductRepository
 import kotlinx.coroutines.launch
 
-class ProductViewModel(private val productOnlyRepository: ProductOnlyRepository) : ViewModel() {
+class ProductViewModel(private val productRepository: ProductRepository) : ViewModel() {
 
     // LiveData for observing products list
     private val _products = MutableLiveData<GetProductsResponse?>()
@@ -25,7 +24,7 @@ class ProductViewModel(private val productOnlyRepository: ProductOnlyRepository)
         viewModelScope.launch {
             try {
                 // Make the API call via the repository
-                val response = productOnlyRepository.getProducts(token)
+                val response = productRepository.getProducts(token)
 
                 // Log the response for debugging
                 if (response.isSuccessful) {
